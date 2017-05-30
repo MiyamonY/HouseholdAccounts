@@ -1,0 +1,44 @@
+version: '2'
+services:
+  web:
+    image: 'tarhan/lapis'
+    container_name: lapis
+    ports:
+      - "8080:8080"
+    command: 'server development'
+    volumes:
+      - .:/app/src
+      - ./logs:/app/src/logs
+    depends_on:
+      - postgres
+  postgres:
+    image: 'postgres'
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: 'accounts'
+      POSTGRES_PASSWORD: 'password'
+    volumes_from:
+      - postgres-data
+  postgres-data:
+    image: 'busybox'
+    container_name: postgres-data
+    volumes:
+      - /var/lib/postgresql/data
+  migrate:
+    image: 'tarhan/lapis'
+    container_name: migrate
+    command: 'migrate --trace development '
+    volumes:
+      - .:/app/src
+      - ./logs:/app/src/logs
+    depends_on:
+      - postgres
+  moonc:
+    build: 'docker/moonc'
+    command: 'moonc -w .'
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/source/

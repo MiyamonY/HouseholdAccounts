@@ -18,16 +18,16 @@ class Menu
 class Layout extends Widget
   @include Menu
 
+  component_path: "static/components"
+
   content: =>
     html_5 lang:"ja", ->
       head ->
         title @page_title or "Household Account"
         meta charset:"UTF-8"
-        link rel:"stylesheet", type:"text/css", href:"static/Semantic-UI-CSS-master/semantic.min.css"
-        script src:"https://code.jquery.com/jquery-3.1.1.min.js",
-          integrity:"sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=",
-          crossorigin:"anonymous"
-        script src:"static/Semantic-UI-CSS-master/semantic.min.js"
+        link rel:"stylesheet", type:"text/css", href:"#{@component_path}/semantic/dist/semantic.min.css"
+        script src:"#{@component_path}/jquery/dist/jquery.min.js"
+        script src:"#{@component_path}/semantic/dist/semantic.min.js"
       body ->
         @menu!
 

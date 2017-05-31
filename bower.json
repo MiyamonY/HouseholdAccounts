@@ -1,0 +1,10 @@
+{
+  "name": "HousehoulAccounts",
+  "description": "",
+  "license": "MIT",
+  "homepage": "",
+  "dependencies": {
+    "semantic": "semantic-ui#^2.2.10",
+    "semantic-ui-calendar": "^0.0.8"
+  }
+}

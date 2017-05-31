@@ -42,3 +42,13 @@ services:
     tty: true
     volumes:
       - .:/source/
+  bower:
+    image: 'mkenney/npm'
+    container_name: bower
+    command: 'bower install'
+    volumes:
+      - .:/src/app
+    environment:
+      PUID: 1000
+      PGID: 1000
+    working_dir: '/src/app'

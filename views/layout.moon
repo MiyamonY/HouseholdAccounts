@@ -26,8 +26,10 @@ class Layout extends Widget
         title @page_title or "Household Account"
         meta charset:"UTF-8"
         link rel:"stylesheet", type:"text/css", href:"#{@component_path}/semantic/dist/semantic.min.css"
+        link rel:"stylesheet", type:"text/css", href:"#{@component_path}/semantic-ui-calendar/dist/calendar.min.css"
         script src:"#{@component_path}/jquery/dist/jquery.min.js"
         script src:"#{@component_path}/semantic/dist/semantic.min.js"
+        script src:"#{@component_path}/semantic-ui-calendar/dist/calendar.min.js"
       body ->
         @menu!
 

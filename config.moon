@@ -11,6 +11,7 @@ config {"development"}, ->
   }
 
   postgres {
+    backend: "pgmoon"
     host: "postgres"
     user: "accounts"
     password: "password"

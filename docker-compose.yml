@@ -10,6 +10,7 @@ services:
       - .:/app/src
       - ./logs:/app/src/logs
     depends_on:
+      - postgres-data
       - postgres
   postgres:
     image: 'postgres'

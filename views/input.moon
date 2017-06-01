@@ -6,20 +6,35 @@ class Input extends Widget
     form class:{"ui", "form"}, method:"post", ->
       div class:{"field"}, ->
         label "日付"
-        input name:"date", type:"date"
+        div class:{"ui", "calendar"}, id:"date", ->
+          div class:{"ui", "input", "left", "icon"}, ->
+            i class:{"calendar", "icon"}
+            input name:"date", type:"text", placeholder:"支払い日"
       div class:{"field"}, ->
-        lable "項目"
-        input name:"kind", type:"text"
-      div class:{"field"}, ->
-        label "支払い"
+        label "項目"
         div class:{"ui", "selection", "dropdown"}, ->
-          input name:"who", type:"hidden"
+          input name:"kind", type:"hidden"
           i class:{"dropdown", "icon"}
-          div class:{"default", "text"}, "支払い"
+          div class:{"default", "text"}, "何に使ったか"
           div class:"menu", ->
-            element "div", {["class"]:"item", ["data-value"]:"0"}, "洋平"
-            element "div", {["class"]:"item", ["data-value"]:"1"}, "あゆみ"
+            for kind in *@kinds
+              element "div", {["class"]:"item", ["data-value"]:kind.id}, kind.kind
+      div class:{"field"}, ->
+        label "支払い者"
+        div class:{"ui", "selection", "dropdown"}, ->
+          input name:"member", type:"hidden"
+          i class:{"dropdown", "icon"}
+          div class:{"default", "text"}, "誰が払ったか"
+          div class:"menu", ->
+            for member in *@members
+              element "div", {["class"]:"item", ["data-value"]:member.id}, member.member
       div class:{"field"}, ->
         label "金額(円)"
-        input name:"amounts", type:"number"
+        div class:{"ui", "rigth", "labeled", "input"}, ->
+          div class:{"ui", "label"}, "￥"
+          input name:"amount", type:"number", placeholder:"金額"
+      div class:{"field"}, ->
+        label "その他"
+        input name:"etc", type:"text", placeholder:"店名など"
       button class:{"ui", "button"}, type:"submit", "確定"
+    script src:"static/input.js"

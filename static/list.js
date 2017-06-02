@@ -1,5 +1,5 @@
 $(function(){
-    $("#delete-button").click(function(e) {
+    $("button[name=delete]").click(function(e) {
         var button = this;
         $("#delete-confirm").modal({
             onDeny: function(){

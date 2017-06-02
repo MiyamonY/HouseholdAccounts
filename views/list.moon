@@ -34,7 +34,7 @@ class List extends Widget
                 td class:{"center"}, account.input_date
                 td class:{"center"}, ->
                   button class:{"ui", "blue","button"}, type:"submit", name:"correct", value:"#{account.id}", "修正"
-                  button class:{"ui", "red","button"}, type:"button", name:"delete", value:"#{account.id}", id:"delete-button", "削除"
+                  button class:{"ui", "red","button"}, type:"button", name:"delete", value:"#{account.id}", "削除"
           tfoot ->
             tr ->
               th colspan:"7", ->

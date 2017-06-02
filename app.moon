@@ -5,6 +5,12 @@ util = require "lapis.util"
 import respond_to from require "lapis.application"
 import Accounts, Kinds, Members from require "models"
 
+class Message
+  new: (type, head, message) =>
+    @type = type
+    @head = head
+    @message = message
+
 class extends lapis.Application
   layout: require "views.layout"
   [index: "/"]: =>
@@ -15,7 +21,8 @@ class extends lapis.Application
     GET: =>
       @page_title = "入出金一覧"
       @accounts = Accounts\select!
-      print "#{util.to_json(@accounts)}"
+      @messages =  @session.messages
+      @session.messages = nil
       render: true
 
     POST: =>
@@ -23,6 +30,7 @@ class extends lapis.Application
       if @params.delete
         account = Accounts\find @params.delete
         account\delete!
+        @session.messages = {Message("info", "削除", {"削除しました"})}
         redirect_to: @url_for("list")
       elseif @params.correct
         return redirect_to: @url_for("correct", id: @params.correct)
@@ -34,7 +42,6 @@ class extends lapis.Application
     before: =>
       id = @params.id
       @account = Accounts\find id
-      print "#{util.to_json(@account)}"
       @write status:404, "account(no.#{id}) not found" unless @account
 
     GET: =>
@@ -51,6 +58,7 @@ class extends lapis.Application
       @account.amount = @params.amount
       @account.etc = @params.etc or ""
       @account\update
+      @session.messages = {Message("info", "修正", {"修正しました"})}
       redirect_to: @url_for "list"
   }
 
@@ -71,5 +79,6 @@ class extends lapis.Application
       etc: @params.etc or ""
       input_date: db.format_date!
     }
+    @session.messages = {Message("info", "追加", {"追加しました"})}
     redirect_to: @url_for "list"
   }

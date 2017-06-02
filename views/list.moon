@@ -4,6 +4,14 @@ class List extends Widget
   content: =>
     @content_for "inner", ->
       h1 class:{"header"}, "入出金一覧"
+      if @messages
+        for message in *@messages
+          div class:{"ui", message.type, "message"}, ->
+            i class:{"close", "icon"}
+            div class:"header", message.head
+            ul class:"list", ->
+              for mes in *message.message
+                li mes
       form class:{"ui", "form"}, method:"post", id:"form", ->
         element "table", class:{"ui", "sortable", "celled", "table"}, ->
           thead ->

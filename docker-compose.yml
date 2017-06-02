@@ -1,6 +1,21 @@
 version: '2'
 services:
-  web:
+  release:
+    image: 'tarhan/lapis'
+    container_name: lapis
+    ports:
+      - "80:80"
+    command: 'server production'
+    volumes:
+      - .:/app/src
+      - ./logs:/app/src/logs
+    depends_on:
+      - postgres-data
+      - postgres
+      - migrate
+      - bower
+      - moon
+  debug:
     image: 'tarhan/lapis'
     container_name: lapis
     ports:
@@ -38,6 +53,11 @@ services:
       - ./logs:/app/src/logs
     depends_on:
       - postgres
+  moon:
+    build: 'docker/moonc'
+    command: 'moonc .'
+    volumes:
+      - .:/source/
   moonc:
     build: 'docker/moonc'
     command: 'moonc -w .'

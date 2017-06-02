@@ -12,6 +12,8 @@ services:
     depends_on:
       - postgres-data
       - postgres
+      - migrate
+      - bower
   postgres:
     image: 'postgres'
     container_name: postgres-db

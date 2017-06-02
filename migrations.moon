@@ -11,6 +11,7 @@ db = require "lapis.db"
       {"kind_id", types.foreign_key}
       {"amount", types.integer}
       {"etc", types.text}
+      {"input_date", types.date}
 
       "PRIMARY KEY (id)"
     }

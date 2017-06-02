@@ -1,7 +1,7 @@
 import Widget from require "lapis.html"
 
 class Menu
-  menu: =>
+  create_menu: =>
     div class:{"ui", "labeled", "icon", "menu"}, ->
       div class:{"header", "item"}, ""
       a class:{"item"}, href:@url_for("index"), ->
@@ -14,24 +14,28 @@ class Menu
         i class:{"shop", "icon"}
         text "出金入力"
 
+class Head
+  component_path: "/static/components"
+
+  create_head: =>
+    title @page_title or "Household Account"
+    meta charset:"UTF-8"
+    link rel:"stylesheet", type:"text/css", href:"#{@component_path}/semantic/dist/semantic.min.css"
+    link rel:"stylesheet", type:"text/css", href:"#{@component_path}/semantic-ui-calendar/dist/calendar.min.css"
+    script src:"#{@component_path}/jquery/dist/jquery.min.js"
+    script src:"#{@component_path}/semantic/dist/semantic.min.js"
+    script src:"#{@component_path}/semantic-ui-calendar/dist/calendar.min.js"
 
 class Layout extends Widget
   @include Menu
-
-  component_path: "static/components"
+  @include Head
 
   content: =>
     html_5 lang:"ja", ->
       head ->
-        title @page_title or "Household Account"
-        meta charset:"UTF-8"
-        link rel:"stylesheet", type:"text/css", href:"#{@component_path}/semantic/dist/semantic.min.css"
-        link rel:"stylesheet", type:"text/css", href:"#{@component_path}/semantic-ui-calendar/dist/calendar.min.css"
-        script src:"#{@component_path}/jquery/dist/jquery.min.js"
-        script src:"#{@component_path}/semantic/dist/semantic.min.js"
-        script src:"#{@component_path}/semantic-ui-calendar/dist/calendar.min.js"
+        @create_head!
       body ->
-        @menu!
+        @create_menu!
 
         div class:{"ui", "container"}, ->
           @content_for "inner"

@@ -2,7 +2,7 @@ import Widget from require "lapis.html"
 
 class Menu
   create_menu: =>
-    div class:{"ui", "labeled", "icon", "menu"}, ->
+    div class:{"ui", "stackable", "labeled", "icon", "menu"}, ->
       div class:{"header", "item"}, ""
       a class:{"item"}, href:@url_for("index"), ->
         i class:{"home", "icon"}
@@ -39,7 +39,7 @@ class Layout extends Widget
       body ->
         @create_menu!
 
-        div class:{"ui", "container"}, ->
+        div class:{"ui", "grid", "container"}, ->
           @content_for "inner"
         @content_for "tail_scripts"
         script src:"/static/common.js"

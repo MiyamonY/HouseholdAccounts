@@ -8,23 +8,23 @@ class List extends Widget
         element "table", class:{"ui", "sortable", "celled", "table"}, ->
           thead ->
             tr ->
-              th "支払い日"
-              th "項目"
-              th "支払い者"
-              th "金額"
-              th "その他"
-              th "入力日"
-              th ""
+              th class:{"center"}, "支払い日"
+              th class:{"center"}, "項目"
+              th class:{"center"}, "支払い者"
+              th class:{"center"}, "金額"
+              th class:{"center"}, "その他"
+              th class:{"center"}, "入力日"
+              th class:{"center"}, "設定"
           tbody ->
             for account in *@accounts
               tr ->
-                td account.date
-                td account\get_kind!.kind
-                td account\get_member!.member
-                td "￥ #{account.amount}"
-                td account.etc
-                td account.input_date
-                td ->
+                td class:{"center"}, account.date
+                td class:{"center"}, account\get_kind!.kind
+                td class:{"center"}, account\get_member!.member
+                td class:{"center"}, "￥ #{account.amount}"
+                td class:{"center"}, account.etc
+                td class:{"center"}, account.input_date
+                td class:{"center"}, ->
                   button class:{"ui", "blue","button"}, type:"submit", name:"correct", value:"#{account.id}", "修正"
                   button class:{"ui", "red","button"}, type:"submit", name:"delete", value:"#{account.id}", "削除"
           tfoot ->

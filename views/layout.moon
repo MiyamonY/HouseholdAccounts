@@ -22,6 +22,7 @@ class Head
     meta charset:"UTF-8"
     link rel:"stylesheet", type:"text/css", href:"#{@component_path}/semantic/dist/semantic.min.css"
     link rel:"stylesheet", type:"text/css", href:"#{@component_path}/semantic-ui-calendar/dist/calendar.min.css"
+    link rel:"stylesheet", type:"text/css", href:"/static/common.css"
     script src:"#{@component_path}/jquery/dist/jquery.min.js"
     script src:"#{@component_path}/semantic/dist/semantic.min.js"
     script src:"#{@component_path}/semantic-ui-calendar/dist/calendar.min.js"

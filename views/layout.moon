@@ -20,6 +20,7 @@ class Head
   create_head: =>
     title @page_title or "Household Account"
     meta charset:"UTF-8"
+    meta name:"viewport", content:"width=device-width, initial-scale=1.0, maximum-scale=1.0"
     link rel:"stylesheet", type:"text/css", href:"#{@component_path}/semantic/dist/semantic.min.css"
     link rel:"stylesheet", type:"text/css", href:"#{@component_path}/semantic-ui-calendar/dist/calendar.min.css"
     link rel:"stylesheet", type:"text/css", href:"/static/common.css"
@@ -27,7 +28,6 @@ class Head
     script src:"#{@component_path}/semantic/dist/semantic.min.js"
     script src:"#{@component_path}/semantic-ui-calendar/dist/calendar.min.js"
     script src:"#{@component_path}/jquery-tablesort/jquery.tablesort.min.js"
-
 class Layout extends Widget
   @include Menu
   @include Head

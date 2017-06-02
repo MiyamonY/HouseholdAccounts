@@ -2,7 +2,7 @@ version: '2'
 services:
   release:
     image: 'tarhan/lapis'
-    container_name: lapis
+    container_name: lapis_relase
     ports:
       - "80:80"
     command: 'server production'

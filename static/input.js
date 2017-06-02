@@ -11,6 +11,4 @@ $(function(){
                              }
                          }
                         });
-
-    $('.ui.dropdown').dropdown();
 });

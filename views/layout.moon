@@ -25,6 +25,7 @@ class Head
     script src:"#{@component_path}/jquery/dist/jquery.min.js"
     script src:"#{@component_path}/semantic/dist/semantic.min.js"
     script src:"#{@component_path}/semantic-ui-calendar/dist/calendar.min.js"
+    script src:"#{@component_path}/jquery-tablesort/jquery.tablesort.min.js"
 
 class Layout extends Widget
   @include Menu
@@ -39,3 +40,4 @@ class Layout extends Widget
 
         div class:{"ui", "container"}, ->
           @content_for "inner"
+        script src:"/static/common.js"

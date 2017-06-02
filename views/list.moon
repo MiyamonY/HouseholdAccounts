@@ -5,7 +5,7 @@ class List extends Widget
     @content_for "inner", ->
       h1 class:{"header"}, "入出金一覧"
       form class:{"ui", "form"}, method:"post", ->
-        element "table", class:{"ui", "celled", "table"}, ->
+        element "table", class:{"ui", "sortable", "celled", "table"}, ->
           thead ->
             tr ->
               th "支払い日"

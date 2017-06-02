@@ -20,13 +20,6 @@ class extends lapis.Application
 
     POST: =>
       print "#{util.to_json(@params)}"
-      if hello = os.getenv "hello"
-        print "You have hello", hello
-      elseif world = os.getenv "world"
-        print "you have world", world
-      else
-        print "nothing :("
-
       if @params.delete
         account = Accounts\find @params.delete
         account\delete!

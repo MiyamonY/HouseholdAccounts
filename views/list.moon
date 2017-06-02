@@ -4,7 +4,7 @@ class List extends Widget
   content: =>
     @content_for "inner", ->
       h1 class:{"header"}, "入出金一覧"
-      form class:{"ui", "form"}, method:"post", ->
+      form class:{"ui", "form"}, method:"post", id:"form", ->
         element "table", class:{"ui", "sortable", "celled", "table"}, ->
           thead ->
             tr ->
@@ -26,7 +26,7 @@ class List extends Widget
                 td class:{"center"}, account.input_date
                 td class:{"center"}, ->
                   button class:{"ui", "blue","button"}, type:"submit", name:"correct", value:"#{account.id}", "修正"
-                  button class:{"ui", "red","button"}, type:"submit", name:"delete", value:"#{account.id}", "削除"
+                  button class:{"ui", "red","button"}, type:"button", name:"delete", value:"#{account.id}", id:"delete-button", "削除"
           tfoot ->
             tr ->
               th colspan:"7", ->
@@ -39,3 +39,12 @@ class List extends Widget
                   a class:{"item"}, "4"
                   a class:{"icon", "item"}, ->
                     i class:{"right", "chevron", "icon"}
+        div class:{"ui", "small", "modal"}, id:"delete-confirm",->
+          div class:{"header"}, "確認"
+          div class:{"content"}, ->
+            text "本当に削除しますか?"
+          div class:"actions", ->
+            div class:{"ui", "approve", "blue", "button"}, "はい"
+            div class:{"ui", "cancel", "red", "button"}, "いいえ"
+    @content_for "tail_scripts", ->
+      script src:"/static/list.js"

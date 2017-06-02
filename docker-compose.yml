@@ -4,22 +4,7 @@ services:
     image: 'tarhan/lapis'
     container_name: lapis_relase
     ports:
-      - "80:80"
-    command: 'server production'
-    volumes:
-      - .:/app/src
-      - ./logs:/app/src/logs
-    depends_on:
-      - postgres-data
-      - postgres
-      - migrate
-      - bower
-      - moon
-  debug:
-    image: 'tarhan/lapis'
-    container_name: lapis_release
-    ports:
-      - "80:80"
+      - "10000:80"
     command: 'server production'
     volumes:
       - .:/app/src

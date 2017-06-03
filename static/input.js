@@ -11,4 +11,8 @@ $(function(){
                              }
                          }
                         });
+
+    $('div.label').click(function(e){
+        $('#etc').val($(this).data('value'));
+    });
 });

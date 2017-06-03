@@ -36,8 +36,14 @@ class Input extends Widget
               input name:"amount", type:"number", placeholder:"金額"
         div class:{"field"}, ->
             label "その他"
-            input name:"etc", type:"text", placeholder:"店名など"
+            input name:"etc", type:"text", id:"etc", placeholder:"店名など"
+            if @labels
+              div class:{"ui", "tag", "mini", "labels"}, ->
+                for label in *@labels
+                  a href:"#etc", ->
+                    div class:{"ui", "#{label.color}", "label"}, ["data-value"]:"#{label.name}", "#{label.name}"
         div class:{"field"}, ->
           button class:{"ui", "positive", "basic", "button"}, type:"submit", "追加"
           a class:{"ui", "negative", "basic", "button"}, href:@url_for("index"), "戻る"
+
       script src:"static/input.js"

@@ -31,6 +31,14 @@ db = require "lapis.db"
       "PRIMARY KEY (id)"
     }
 
+    create_table "tags", {
+      {"id", types.serial}
+      {"name", types.text}
+      {"color", types.integer}
+
+      "PRIMARY KEY (id)"
+    }
+
 [2]: =>
   db.insert "kinds", {
     kind: "食費"

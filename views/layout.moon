@@ -9,10 +9,16 @@ class Menu
           text "家計簿"
         a class:{"item"}, href:@url_for("list"), ->
           i class:{"list", "icon"}
-          text "使った金額"
+          text "使ったお金"
         a class:{"item"}, href:@url_for("input"), ->
           i class:{"shop", "icon"}
           text "お金入力"
+        div class:{"ui", "dropdown", "item"}, ->
+          i class:{"settings", "icon"}
+          text "設定"
+          i class:{"dropdown", "icon"}
+          div class:{"menu"}, ->
+            a class:{"item"}, href:@url_for("tag_list"), "タグ編集"
 
 class Head
   component_path: "/static/components"

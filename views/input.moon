@@ -37,11 +37,11 @@ class Input extends Widget
         div class:{"field"}, ->
             label "その他"
             input name:"etc", type:"text", id:"etc", placeholder:"店名など"
-            if @labels
+            if @tags
               div class:{"ui", "tag", "mini", "labels"}, ->
-                for label in *@labels
+                for tag in *@tags
                   a href:"#etc", ->
-                    div class:{"ui", "#{label.color}", "label"}, ["data-value"]:"#{label.name}", "#{label.name}"
+                    div class:{"ui", "#{tag.color}", "label"}, ["data-value"]:"#{tag.name}", "#{tag.name}"
         div class:{"field"}, ->
           button class:{"ui", "positive", "basic", "button"}, type:"submit", "追加"
           a class:{"ui", "negative", "basic", "button"}, href:@url_for("index"), "戻る"

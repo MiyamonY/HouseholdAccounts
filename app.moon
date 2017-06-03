@@ -3,7 +3,7 @@ db = require "lapis.db"
 util = require "lapis.util"
 
 import respond_to from require "lapis.application"
-import Accounts, Kinds, Members from require "models"
+import Accounts, Kinds, Members, Tags from require "models"
 
 class Message
   new: (type, head, message) =>
@@ -13,6 +13,7 @@ class Message
 
 class extends lapis.Application
   layout: require "views.layout"
+
   [index: "/"]: =>
     @page_title = "トップ"
     @this = os.date("*t")
@@ -83,6 +84,7 @@ class extends lapis.Application
     @page_title = "出金入力"
     @kinds = Kinds\select!
     @members = Members\select!
+    @tags = Tags\select!
     render: true
 
   POST: =>
@@ -97,4 +99,24 @@ class extends lapis.Application
     }
     @session.messages = {Message("info", "追加", {"追加しました"})}
     redirect_to: @url_for "list"
+  }
+
+  [tag_list: "/tag/list"]: respond_to {
+    GET: =>
+      @tags = Tags\select!
+      render: "tag.list"
+    POST: =>
+      if @params.delete
+        tag = Tags\find @params.delete
+        tag\delete!
+      redirect_to: @url_for "tag_list"
+  }
+
+  [tag_create: "/tag/create"]: respond_to {
+    GET: =>
+      render: "tag.create"
+
+    POST: =>
+      Tags\create {name:@params.name, color:0}
+      redirect_to: @url_for "tag_list"
   }

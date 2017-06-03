@@ -1,4 +1,5 @@
 import Widget from require "lapis.html"
+import DeleteModal from require "views.util.delete_modal"
 
 class DetailModal
   create_detail_modal: (account) =>
@@ -28,16 +29,6 @@ class DetailModal
       div class:{"actions"}, ->
         button class:{"ui", "positive", "basic", "button"}, type:"button", name:"correct", value:"#{account.id}", "修正"
         button class:{"ui", "negative", "basic", "button"}, type:"button", name:"delete", value:"#{account.id}", "削除"
-
-class DeleteModal
-  create_delete_modal: =>
-    div class:{"ui", "small", "modal"}, id:"delete-confirm", ->
-      div class:{"header"}, "確認"
-      div class:{"content"}, ->
-        text "本当に削除しますか?"
-      div class:"actions", ->
-        div class:{"ui", "positive", "basic", "button"}, "はい"
-        div class:{"ui", "negative",  "basic", "button"}, "いいえ"
 
 class List extends Widget
   @include DetailModal

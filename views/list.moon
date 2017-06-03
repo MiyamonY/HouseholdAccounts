@@ -45,7 +45,7 @@ class List extends Widget
 
   content: =>
     @content_for "inner", ->
-      h1 class:{"header"}, "入出金一覧"
+      h1 class:{"header"}, "使ったお金一覧"
       if @messages
         for message in *@messages
           div class:{"ui", message.type, "message"}, ->

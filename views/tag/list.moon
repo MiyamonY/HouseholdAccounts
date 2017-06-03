@@ -4,7 +4,7 @@ class List extends Widget
   content: =>
     @content_for "inner", ->
       h1 class:{"ui", "header"}, ->
-        text "タグ一覧"
+        text "タグ編集"
         a class:{"ui", "teal", "circular", "huge", "label"}, href:@url_for("tag_create"), "+"
       form method:"post", ->
         element "table", class:{"ui", "sortable", "unstackable", "celled", "table"}, ->

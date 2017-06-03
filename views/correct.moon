@@ -3,7 +3,7 @@ import Widget from require "lapis.html"
 class Correct extends Widget
   content: =>
     @content_for "inner", ->
-      h1 class: "header", "出金入力修正"
+      h1 class: "header", "使ったお金(修正)"
       form class:{"ui", "form"}, method:"post", ->
         div class:{"field"}, ->
           label "日付"

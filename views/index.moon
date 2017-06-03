@@ -2,7 +2,6 @@ import Widget from require "lapis.html"
 
 class Input extends Widget
   content: =>
-
     @content_for "inner", ->
       div class:{"ui", "two", "huge", "statistics"}, ->
         div class:{"huge","statistic"}, ->

@@ -38,4 +38,5 @@ class Correct extends Widget
           label "その他"
           input name:"etc", type:"text", placeholder:"店名など", value:@account.etc
         button class:{"ui", "positive", "basic", "button"}, type:"submit", "修正"
+        a class:{"ui", "negative", "basic", "button"}, href:@url_for("list"), "戻る"
       script src:"/static/input.js"

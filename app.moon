@@ -88,7 +88,7 @@ class extends lapis.Application
     render: true
 
   POST: =>
-    db.insert "accounts", {
+    Accounts\create {
       type: Accounts.types.payment
       date: @params.date
       member_id: @params.member

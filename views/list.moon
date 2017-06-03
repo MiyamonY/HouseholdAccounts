@@ -13,7 +13,7 @@ class List extends Widget
               for mes in *message.message
                 li mes
       form class:{"ui", "form"}, method:"post", id:"form", ->
-        element "table", class:{"ui", "sortable", "celled", "table"}, ->
+        element "table", class:{"ui", "sortable", "stackable", "celled", "table"}, ->
           thead ->
             tr ->
               th class:{"center"}, "支払い日"

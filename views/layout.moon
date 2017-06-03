@@ -2,17 +2,17 @@ import Widget from require "lapis.html"
 
 class Menu
   create_menu: =>
-    div class:{"ui", "stackable", "labeled", "icon", "menu"}, ->
-      div class:{"header", "item"}, ""
-      a class:{"item"}, href:@url_for("index"), ->
-        i class:{"home", "icon"}
-        text "トップ"
-      a class:{"item"}, href:@url_for("list"), ->
-        i class:{"list", "icon"}
-        text "入出金一覧"
-      a class:{"item"}, href:@url_for("input"), ->
-        i class:{"shop", "icon"}
-        text "出金入力"
+    div class:{"ui", "stackable",  "menu"}, ->
+      div class:{"ui", "container"}, ->
+        a class:{"header", "item"}, href:@url_for("index"), ->
+          i class:{"shopping bag", "icon"}
+          text "家計簿"
+        a class:{"item"}, href:@url_for("list"), ->
+          i class:{"list", "icon"}
+          text "使った金額"
+        a class:{"item"}, href:@url_for("input"), ->
+          i class:{"shop", "icon"}
+          text "お金入力"
 
 class Head
   component_path: "/static/components"
@@ -39,7 +39,7 @@ class Layout extends Widget
       body ->
         @create_menu!
 
-        div class:{"ui", "grid", "container"}, ->
+        div class:{"ui", "main", "text", "container"}, ->
           @content_for "inner"
         @content_for "tail_scripts"
         script src:"/static/common.js"

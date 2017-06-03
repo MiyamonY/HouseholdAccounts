@@ -26,8 +26,8 @@ class DetailModal
               td class:{"center"}, "入力日"
               td class:{"center"}, account.input_date
       div class:{"actions"}, ->
-        button class:{"ui", "primary", "button"}, type:"button", name:"correct", value:"#{account.id}", "修正"
-        button class:{"ui", "secondary", "button"}, type:"button", name:"delete", value:"#{account.id}", "削除"
+        button class:{"ui", "positive", "basic", "button"}, type:"button", name:"correct", value:"#{account.id}", "修正"
+        button class:{"ui", "negative", "basic", "button"}, type:"button", name:"delete", value:"#{account.id}", "削除"
 
 class DeleteModal
   create_delete_modal: =>
@@ -36,8 +36,8 @@ class DeleteModal
       div class:{"content"}, ->
         text "本当に削除しますか?"
       div class:"actions", ->
-        div class:{"ui", "approve", "blue", "button"}, "はい"
-        div class:{"ui", "cancel", "red", "button"}, "いいえ"
+        div class:{"ui", "positive", "basic", "button"}, "はい"
+        div class:{"ui", "negative",  "basic", "button"}, "いいえ"
 
 class List extends Widget
   @include DetailModal

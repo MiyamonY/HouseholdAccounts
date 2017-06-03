@@ -38,6 +38,6 @@ class Input extends Widget
             label "その他"
             input name:"etc", type:"text", placeholder:"店名など"
         div class:{"field"}, ->
-          button class:{"ui", "positive", "button"}, type:"submit", "追加"
-          a class:{"ui", "negative", "button"}, href:@url_for("index"), "戻る"
+          button class:{"ui", "positive", "basic", "button"}, type:"submit", "追加"
+          a class:{"ui", "negative", "basic", "button"}, href:@url_for("index"), "戻る"
       script src:"static/input.js"

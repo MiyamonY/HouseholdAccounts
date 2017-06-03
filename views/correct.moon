@@ -37,5 +37,5 @@ class Correct extends Widget
         div class:{"field"}, ->
           label "その他"
           input name:"etc", type:"text", placeholder:"店名など", value:@account.etc
-        button class:{"ui", "button"}, type:"submit", "修正"
+        button class:{"ui", "positive", "basic", "button"}, type:"submit", "修正"
       script src:"/static/input.js"

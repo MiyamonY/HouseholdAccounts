@@ -28,7 +28,8 @@ class Correct extends Widget
             div class:{"default", "text"}, "誰が払ったか"
             div class:"menu", ->
               for member in *@members
-                div class:{"item"}, {["data-value"]:member.id}, member.member
+                unless member.deleted
+                  div class:{"item"}, {["data-value"]:member.id}, member.member
         div class:{"field"}, ->
           label "金額(円)"
           div class:{"ui", "rigth", "labeled", "input"}, ->

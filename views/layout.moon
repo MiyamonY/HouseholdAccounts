@@ -18,6 +18,7 @@ class Menu
           text "設定"
           i class:{"dropdown", "icon"}
           div class:{"menu"}, ->
+            a class:{"item"}, href:@url_for("member_list"), "メンバー編集"
             a class:{"item"}, href:@url_for("tag_list"), "タグ編集"
 
 class Head

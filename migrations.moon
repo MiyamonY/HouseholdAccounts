@@ -27,6 +27,8 @@ db = require "lapis.db"
       {"id", types.serial}
       {"member", types.text}
       {"color", types.integer}
+      {"token", types.text}
+      {"deleted", types.boolean}
 
       "PRIMARY KEY (id)"
     }
@@ -55,10 +57,14 @@ db = require "lapis.db"
 
   db.insert "members", {
     member: "洋平"
+    token: ""
     color: 1
+    deleted: db.FALSE
   }
   db.insert "members", {
     member: "あゆみ"
+    token: ""
     color: 2
+    deleted: db.FALSE
   }
 }

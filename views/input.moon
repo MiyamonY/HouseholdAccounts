@@ -19,7 +19,8 @@ class Input extends Widget
             div class:{"default", "text"}, "誰が払ったか"
             div class:"menu", ->
               for member in *@members
-                element "div", {["class"]:"item", ["data-value"]:member.id}, member.member
+                unless member.deleted
+                  element "div", {["class"]:"item", ["data-value"]:member.id}, member.member
         div class:{"required", "field"}, ->
           label "項目"
           div class:{"ui", "selection", "dropdown"}, ->

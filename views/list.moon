@@ -1,5 +1,6 @@
 import Widget from require "lapis.html"
 import DeleteModal from require "views.util.delete_modal"
+import MessageWidget from require "views.util.message"
 
 class DetailModal
   create_detail_modal: (account) =>
@@ -33,18 +34,14 @@ class DetailModal
 class List extends Widget
   @include DetailModal
   @include DeleteModal
+  @include MessageWidget
 
   content: =>
     @content_for "inner", ->
       h1 class:{"header"}, "使ったお金一覧"
       if @messages
         for message in *@messages
-          div class:{"ui", message.type, "message"}, ->
-            i class:{"close", "icon"}
-            div class:"header", message.head
-            ul class:"list", ->
-              for mes in *message.message
-                li mes
+          @create_message message
       element "table", class:{"ui", "sortable", "unstackable", "celled", "table"}, ->
         thead ->
           tr ->

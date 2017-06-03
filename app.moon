@@ -4,12 +4,7 @@ util = require "lapis.util"
 
 import respond_to from require "lapis.application"
 import Accounts, Kinds, Members, Tags from require "models"
-
-class Message
-  new: (type, head, message) =>
-    @type = type
-    @head = head
-    @message = message
+import Message from require "views.util.message"
 
 class extends lapis.Application
   layout: require "views.layout"
@@ -104,11 +99,14 @@ class extends lapis.Application
   [tag_list: "/tag/list"]: respond_to {
     GET: =>
       @tags = Tags\select!
+      @messages =  @session.messages
+      @session.messages = nil
       render: "tag.list"
     POST: =>
       if @params.delete
         tag = Tags\find @params.delete
         tag\delete!
+        @session.messages = {Message("info", "削除", {"削除しました:#{tag.name}"})}
       redirect_to: @url_for "tag_list"
   }
 
@@ -118,5 +116,6 @@ class extends lapis.Application
 
     POST: =>
       Tags\create {name:@params.name, color:0}
+      @session.messages = {Message("info", "追加", {"追加しました:#{@params.name}"})}
       redirect_to: @url_for "tag_list"
   }

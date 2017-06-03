@@ -1,13 +1,19 @@
 import Widget from require "lapis.html"
 import DeleteModal from require "views.util.delete_modal"
+import MessageWidget from require "views.util.message"
 
 class List extends Widget
   @include DeleteModal
+  @include MessageWidget
+
   content: =>
     @content_for "inner", ->
       h1 class:{"ui", "header"}, ->
         text "タグ編集"
         a class:{"ui", "teal", "circular", "huge", "label"}, href:@url_for("tag_create"), "+"
+      if @messages
+        for message in *@messages
+          @create_message message
       form method:"post", id:"form", ->
         element "table", class:{"ui", "sortable", "unstackable", "celled", "table"}, ->
           thead ->

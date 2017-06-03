@@ -69,7 +69,7 @@ class extends lapis.Application
       @account.kind_id = @params.kind
       @account.amount = @params.amount
       @account.etc = @params.etc or ""
-      @account\update
+      @account\update "type", "date", "member_id", "kind_id", "amount", "etc"
       @session.messages = {Message("info", "修正", {"修正しました"})}
       redirect_to: @url_for "list"
   }

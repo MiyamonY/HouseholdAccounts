@@ -11,4 +11,8 @@ $(function(){
             }}
         ).modal('show');
     });
+
+    $("#tag-add-show").click(function(e){
+        $("#tag-add").modal("show");
+    });
 });

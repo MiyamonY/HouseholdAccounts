@@ -8,6 +8,7 @@ import Message from require "views.util.message"
 
 class extends lapis.Application
   layout: require "views.layout"
+  @include "controllers.tag"
 
   [index: "/"]: =>
     @page_title = "トップ"
@@ -95,30 +96,6 @@ class extends lapis.Application
     }
     @session.messages = {Message("info", "追加", {"追加しました"})}
     redirect_to: @url_for "list"
-  }
-
-  [tag_list: "/tag/list"]: respond_to {
-    GET: =>
-      @tags = Tags\select!
-      @messages =  @session.messages
-      @session.messages = nil
-      render: "tag.list"
-    POST: =>
-      if @params.delete
-        tag = Tags\find @params.delete
-        tag\delete!
-        @session.messages = {Message("info", "削除", {"削除しました:#{tag.name}"})}
-      redirect_to: @url_for "tag_list"
-  }
-
-  [tag_create: "/tag/create"]: respond_to {
-    GET: =>
-      render: "tag.create"
-
-    POST: =>
-      Tags\create {name:@params.name, color:0}
-      @session.messages = {Message("info", "追加", {"追加しました:#{@params.name}"})}
-      redirect_to: @url_for "tag_list"
   }
 
   [member_list: "/member/list"]: respond_to {

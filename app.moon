@@ -60,6 +60,7 @@ class extends lapis.Application
       @page_title = "出入金修正"
       @kinds = Kinds\select!
       @members = Members\select!
+      @tags = Tags\select!
       render: "account.correct"
 
     POST: =>

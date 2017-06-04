@@ -35,7 +35,7 @@ class extends lapis.Application
       @accounts = Accounts\select!
       @messages =  @session.messages
       @session.messages = nil
-      render: true
+      render: "account.list"
 
     POST: =>
       print "#{util.to_json(@params)}"
@@ -60,7 +60,7 @@ class extends lapis.Application
       @page_title = "出入金修正"
       @kinds = Kinds\select!
       @members = Members\select!
-      render: true
+      render: "account.correct"
 
     POST: =>
       @account.type = @params.type
@@ -80,7 +80,7 @@ class extends lapis.Application
     @kinds = Kinds\select!
     @members = Members\select!
     @tags = Tags\select!
-    render: true
+    render: "account.input"
 
   POST: =>
     Accounts\create {

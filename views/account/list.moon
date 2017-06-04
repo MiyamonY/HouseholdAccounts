@@ -53,10 +53,10 @@ class List extends Widget
             th class:{"center"}, "金額"
         tbody ->
           for account in *@accounts
-            tr class:{"detail"} , ["data-value"]:"#{account.id}",  ->
+            tr ->
               td class:{"center"}, ->
                 text account.date
-                div class:{"ui", "mini", "blue", "label"}, "info"
+                a class:{"ui", "mini", "blue", "label", "detail"}, ["data-value"]:"#{account.id}", "info"
               td class:{"center"}, account\get_kind!.kind
               td class:{"center"}, "￥ #{account.amount}"
         tfoot ->

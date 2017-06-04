@@ -1,5 +1,5 @@
 $(function(){
-    $("tr.detail").click(function(e){
+    $(".label.detail").click(function(e){
         var account_id = $(this).data('value');
         $("#detail-" + account_id).modal('show');
     });

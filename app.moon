@@ -10,6 +10,7 @@ class extends lapis.Application
   layout: require "views.layout"
   @include "controllers.tag"
   @include "controllers.account"
+  @include "controllers.member"
 
   [index: "/"]: =>
     @page_title = "トップ"
@@ -30,50 +31,3 @@ class extends lapis.Application
     for account in *accounts
       @last_total += account.amount
     render: true
-
-  [member_list: "/member/list"]: respond_to {
-    GET: =>
-      @members = Members\select!
-      @messages =  @session.messages
-      @session.messages = nil
-      render: "member.list"
-
-    POST: =>
-      if @params.delete
-        member = Members\find @params.delete
-        member.deleted = db.TRUE
-        member\update "deleted"
-        @session.messages = {Message("info", "削除", {"削除しました:#{member.member}"})}
-      redirect_to: @url_for "member_list"
-  }
-
-  [member_create: "/member/create"]: respond_to {
-    GET: =>
-      render: "member.create"
-
-    POST: =>
-      Members\create {
-        member: @params.name
-        token: if @params.token then @params.token else nil
-        color: 0
-        deleted: db.FALSE
-      }
-      @session.messages = {Message("info", "追加", {"追加しました:#{@params.name}"})}
-      redirect_to: @url_for "member_list"
-  }
-
-  [member_correct: "/member/correct/:id[%d]"]: respond_to {
-    before: =>
-      id = @params.id
-      @member = Members\find id
-      @write status:404, "member(no.#{id}) not found" unless @member
-
-    GET: =>
-      render: "member.correct"
-
-    POST: =>
-      @member.token = @params.token
-      @member\update "token"
-      @session.messages = {Message("info", "修正", {"修正しました:#{@params.token}"})}
-      redirect_to: @url_for "member_list"
-  }

@@ -5,3 +5,7 @@
 .ui.table td.center {
     text-align: center;
 }
+
+.ui.label > .icon.fitted {
+    margin: 0 0 0 0;
+}

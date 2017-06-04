@@ -8,9 +8,10 @@ class List extends Widget
 
   content: =>
     @content_for "inner", ->
-      h1 class:{"header"}, ->
+      h1 class:{"ui", "header"}, ->
         text "メンバー一覧"
-        a class:{"ui", "teal", "circular", "huge", "label"}, href:@url_for("member_create"), "+"
+        a class:{"ui", "teal", "circular", "huge", "label"}, href:@url_for("member_create"), ->
+          i class:{"plus", "fitted", "icon"}
       if @messages
         for message in *@messages
           @create_message message

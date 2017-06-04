@@ -38,9 +38,10 @@ class List extends Widget
 
   content: =>
     @content_for "inner", ->
-      h1 class:{"header"}, ->
+      h1 class:{"ui", "header"}, ->
         text "使ったお金一覧"
-        a class:{"ui", "teal", "circular", "huge", "label"}, href:@url_for("input"), "+"
+        a class:{"ui", "teal", "circular", "huge", "label"}, href:@url_for("input"), ->
+          i class:{"plus", "fitted", "icon"}
       if @messages
         for message in *@messages
           @create_message message

@@ -10,7 +10,8 @@ class List extends Widget
     @content_for "inner", ->
       h1 class:{"ui", "header"}, ->
         text "タグ編集"
-        a class:{"ui", "teal", "circular", "huge", "label"}, href:@url_for("tag_create"), "+"
+        a class:{"ui", "teal", "circular", "huge", "label"}, href:@url_for("tag_create"), ->
+          i class:{"plus", "fitted", "icon"}
       if @messages
         for message in *@messages
           @create_message message

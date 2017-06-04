@@ -7,7 +7,7 @@ class Menu
         a class:{"header", "item"}, href:@url_for("index"), ->
           i class:{"shopping bag", "icon"}
           text "家計簿"
-        a class:{"item"}, href:@url_for("list"), ->
+        a class:{"item"}, href:@url_for("account_list"), ->
           i class:{"list", "icon"}
           text "使ったお金"
         div class:{"ui", "dropdown", "item"}, ->
@@ -28,10 +28,12 @@ class Head
     link rel:"stylesheet", type:"text/css", href:"#{@component_path}/semantic/dist/semantic.min.css"
     link rel:"stylesheet", type:"text/css", href:"#{@component_path}/semantic-ui-calendar/dist/calendar.min.css"
     link rel:"stylesheet", type:"text/css", href:"/static/common.css"
+    @content_for "extra_csses"
     script src:"#{@component_path}/jquery/dist/jquery.min.js"
     script src:"#{@component_path}/semantic/dist/semantic.min.js"
     script src:"#{@component_path}/semantic-ui-calendar/dist/calendar.min.js"
     script src:"#{@component_path}/jquery-tablesort/jquery.tablesort.min.js"
+
 class Layout extends Widget
   @include Menu
   @include Head

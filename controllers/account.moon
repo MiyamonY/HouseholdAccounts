@@ -75,3 +75,16 @@ class Account extends lapis.Application
     @session.messages = {Message("info", "追加", {"追加しました"})}
     redirect_to: @url_for "account_list"
   }
+
+  "/accounts": =>
+    params = @req.params_get
+    from_ = params["from"] or 2017
+    to = params["to"] or 2017
+    data = {}
+    for year = from_, to
+      amounts = {}
+      for month = 1, 12
+        accounts = Accounts\select_by_date year, month
+        table.insert(amounts, Accounts.sum_up_amounts(accounts))
+      table.insert(data, {["year"]:year, ["amounts"]:amounts})
+    json: data

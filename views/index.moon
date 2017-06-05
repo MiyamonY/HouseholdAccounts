@@ -19,3 +19,8 @@ class Input extends Widget
             span class:{"mini"}, "￥"
             text "#{@last_total}"
 
+      h1 class:{"ui", "header"}, "年間使用金額"
+      div id:"plot"
+    @content_for "tail_scripts", ->
+      script src:"/static/components/plotly/plotly.js"
+      script src:"/static/index.js"

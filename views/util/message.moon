@@ -4,6 +4,12 @@ class Message
     @header = header
     @messages = messages
 
+  to_string: =>
+    str = "#{@type}: #{@header}\n"
+    for message in *@messages
+      str = str .. message
+    str
+
 class MessageWidget
   create_message: (message) =>
     div class:{"ui", message.type, "message"}, ->

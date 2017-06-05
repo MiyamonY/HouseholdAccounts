@@ -4,6 +4,7 @@ db = require "lapis.db"
 import respond_to from require "lapis.application"
 import Accounts, Kinds, Members, Tags from require "models"
 import Message from require "views.util.message"
+import Line from require "line"
 
 class Account extends lapis.Application
   @path: "/account"
@@ -72,7 +73,12 @@ class Account extends lapis.Application
       etc: @params.etc or ""
       input_date: db.format_date!
     }
-    @session.messages = {Message("info", "追加", {"追加しました"})}
+    message = Message("info", "追加", {"追加しました"})
+    @session.messages = {message}
+    members = Members\has_token!
+    if members
+      line = Line message
+      line\notify_to members
     redirect_to: @url_for "account_list"
   }
 

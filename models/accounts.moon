@@ -1,4 +1,6 @@
-import Model,enum from require "lapis.db.model"
+import Model,enum,preload from require "lapis.db.model"
+import Members, Kinds from require "models"
+import to_json from require "lapis.util"
 
 class Accounts extends Model
   @relations: {
@@ -26,6 +28,14 @@ class Accounts extends Model
         where = where .. " and "
       where = where .. "EXTRACT(DAY FROM date) = #{day}"
     Accounts\select where
+
+  to_json_data:  =>
+    -- preload
+    Members\include_in {@}, "member_id"
+    Kinds\include_in {@}, "kind_id"
+    print "#{to_json(@)}"
+    {id:@.id, amount: @.amount, date:@.date, member:@.member.member, kind:@.kind.kind,
+      input_date:@.input_date, etc:@.etc}
 
   sum_up_amounts: (accounts) ->
     sum_up = 0

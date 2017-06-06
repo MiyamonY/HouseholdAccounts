@@ -5,6 +5,7 @@ import respond_to from require "lapis.application"
 import Accounts, Kinds, Members, Tags from require "models"
 import Message from require "views.util.message"
 import Line from require "line"
+import to_json from require "lapis.util"
 
 class Account extends lapis.Application
   @path: "/account"
@@ -81,6 +82,11 @@ class Account extends lapis.Application
       line\notify_to members
     redirect_to: @url_for "account_list"
   }
+
+  "/account": =>
+    id = @req.params_get.id
+    account = Accounts\find id
+    json: account\to_json_data!
 
   "/accounts/sum": =>
     params = @req.params_get

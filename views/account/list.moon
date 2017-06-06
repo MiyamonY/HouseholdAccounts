@@ -3,33 +3,33 @@ import DeleteModal from require "views.util.delete_modal"
 import MessageWidget from require "views.util.message"
 
 class DetailModal
-  create_detail_modal: (account) =>
-    div class:{"ui", "small", "modal"}, id:"detail-#{account.id}", ->
+  create_detail_modal: =>
+    div class:{"ui", "small", "modal"}, id:"detail-modal", ->
       div class:{"header"}, "詳細"
       div class:{"content"}, ->
         element "table", class:{"ui", "unstackable", "definition", "table"}, ->
           tbody ->
             tr ->
               td class:{"center"}, "支払い日"
-              td class:{"center"}, account.date
+              td class:{"center"}, id:"detail-date"
             tr ->
               td class:{"center"}, "項目"
-              td class:{"center"}, account\get_kind!.kind
+              td class:{"center"}, id:"detail-kind"
             tr ->
               td class:{"center"}, "金額"
-              td class:{"center"}, "￥ #{account.amount}"
+              td class:{"center"}, id:"detail-amount"
             tr ->
               td class:{"center"}, "担当"
-              td class:{"center"}, account\get_member!.member
+              td class:{"center"}, id:"detail-member"
             tr ->
               td class:{"center"}, "その他"
-              td class:{"center"}, account.etc
+              td class:{"center"}, id:"detail-etc"
             tr ->
               td class:{"center"}, "入力日"
-              td class:{"center"}, account.input_date
+              td class:{"center"}, id:"detail-input-date"
       div class:{"actions"}, ->
-        button class:{"ui", "positive", "basic", "button"}, type:"button", name:"correct", value:"#{account.id}", "修正"
-        button class:{"ui", "negative", "basic", "button"}, type:"button", name:"delete", value:"#{account.id}", "削除"
+        button class:{"ui", "positive", "basic", "button"}, type:"button", id:"detail-correct", name:"correct", "修正"
+        button class:{"ui", "negative", "basic", "button"}, type:"button", id:"detail-delete", name:"delete", "削除"
 
 class List extends Widget
   @include DetailModal
@@ -71,8 +71,7 @@ class List extends Widget
                 a class:{"item"}, "4"
                 a class:{"icon", "item"}, ->
                   i class:{"right", "chevron", "icon"}
-      for account in *@accounts
-        @create_detail_modal account
+      @create_detail_modal!
       @create_delete_modal!
 
       form method:"post", id:"form"

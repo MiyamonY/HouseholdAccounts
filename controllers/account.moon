@@ -82,7 +82,7 @@ class Account extends lapis.Application
     redirect_to: @url_for "account_list"
   }
 
-  "/accounts": =>
+  "/accounts/sum": =>
     params = @req.params_get
     from_ = params["from"] or 2017
     to = params["to"] or 2017

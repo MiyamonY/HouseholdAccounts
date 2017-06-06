@@ -26,7 +26,7 @@ function accounts_received(data, textStatus) {
 
 $(function(){
     year = new Date().getFullYear()
-    $.getJSON('/account/accounts',
+    $.getJSON('/account/accounts/sum',
 			        {form: year,
                to:year},
               accounts_received

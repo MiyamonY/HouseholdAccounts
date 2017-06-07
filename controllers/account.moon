@@ -15,7 +15,7 @@ class Account extends lapis.Application
   [list: "/list"]:  respond_to {
     GET: =>
       @page_title = "入出金一覧"
-      @accounts = Accounts\paginated {per_page:10,
+      @accounts = Accounts\paginated [[order by date desc]], {per_page:10,
         prepare_results: (accounts) ->
           map accounts, (account) -> account\to_json_data!
       }
@@ -93,7 +93,7 @@ class Account extends lapis.Application
     json: account\to_json_data!
 
   "/accounts": =>
-    account_page = Accounts\paginated {per_page:10,
+    account_page = Accounts\paginated [[order by date desc]], {per_page:10,
         prepare_results: (accounts) ->
           map accounts, (account) -> account\to_json_data!
     }

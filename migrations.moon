@@ -28,6 +28,7 @@ db = require "lapis.db"
       {"member", types.text}
       {"color", types.integer}
       {"token", types.text}
+      {"send", types.boolean}
       {"deleted", types.boolean}
 
       "PRIMARY KEY (id)"

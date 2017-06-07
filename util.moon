@@ -1,7 +1,12 @@
+import to_json from require "lapis.util"
+
+print_as_json = (obj) ->
+  print "#{to_json(obj)}"
+
 map = (arr, f) ->
   ret = {}
   for i = 1, #arr
     table.insert(ret, f arr[i])
   ret
 
-{:map}
+{:print_as_json, :map}

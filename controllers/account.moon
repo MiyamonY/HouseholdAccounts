@@ -80,7 +80,7 @@ class Account extends lapis.Application
     }
     message = Message("info", "追加", {"追加しました"})
     @session.messages = {message}
-    members = Members\has_token!
+    members = Members.send_notification!
     if members
       line = Line message
       line\notify_to members

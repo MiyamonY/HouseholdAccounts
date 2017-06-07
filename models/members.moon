@@ -1,3 +1,4 @@
+db = require "lapis.db"
 import Model, enum from require "lapis.db.model"
 
 class Members extends Model
@@ -8,3 +9,6 @@ class Members extends Model
 
   has_token: ->
     Members\select "where deleted = false and token <> ?", ""
+
+  send_notification: ->
+    Members\select "where deleted = ? and token <> ? and send = ?", db.FALSE, "", db.TRUE

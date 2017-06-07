@@ -1,10 +1,10 @@
 lapis = require "lapis"
 db = require "lapis.db"
-util = require "lapis.util"
 
 import respond_to from require "lapis.application"
 import Members from require "models"
 import Message from require "views.util.message"
+import print_as_json from require "util"
 
 class Member extends lapis.Application
   @path: "/member"
@@ -31,11 +31,14 @@ class Member extends lapis.Application
       render: "member.create"
 
     POST: =>
+      print_as_json @params
+
       Members\create {
         member: @params.name
         token: if @params.token then @params.token else nil
         color: 0
         deleted: db.FALSE
+        send: if @params.send == "on" then db.TRUE else db.FALSE
       }
       @session.messages = {Message("info", "追加", {"追加しました:#{@params.name}"})}
       redirect_to: @url_for "member_list"
@@ -51,8 +54,10 @@ class Member extends lapis.Application
       render: "member.correct"
 
     POST: =>
-      @member.token = @params.token
-      @member\update "token"
+      @member\update {
+        token: @params.token
+        send: if @params.send == "on" then db.TRUE else db.FALSE
+      }
       @session.messages = {Message("info", "修正", {"修正しました:#{@params.token}"})}
       redirect_to: @url_for "member_list"
   }

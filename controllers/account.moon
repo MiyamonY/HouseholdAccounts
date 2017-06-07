@@ -6,6 +6,7 @@ import Accounts, Kinds, Members, Tags from require "models"
 import Message from require "views.util.message"
 import Line from require "line"
 import to_json from require "lapis.util"
+import map from require "util"
 
 class Account extends lapis.Application
   @path: "/account"
@@ -14,7 +15,10 @@ class Account extends lapis.Application
   [list: "/list"]:  respond_to {
     GET: =>
       @page_title = "入出金一覧"
-      @accounts = Accounts\select!
+      @accounts = Accounts\paginated {per_page:10,
+        prepare_results: (accounts) ->
+          map accounts, (account) -> account\to_json_data!
+      }
       @messages =  @session.messages
       @session.messages = nil
       render: "account.list"
@@ -87,6 +91,15 @@ class Account extends lapis.Application
     id = @req.params_get.id
     account = Accounts\find id
     json: account\to_json_data!
+
+  "/accounts": =>
+    account_page = Accounts\paginated {per_page:10,
+        prepare_results: (accounts) ->
+          map accounts, (account) -> account\to_json_data!
+    }
+    page = @req.params_get.page
+    accounts = account_page\get_page if page then page else 1
+    json: accounts
 
   "/accounts/sum": =>
     params = @req.params_get

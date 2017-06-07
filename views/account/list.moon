@@ -51,25 +51,23 @@ class List extends Widget
             th class:{"center"}, "支払い日"
             th class:{"center"}, "項目"
             th class:{"center"}, "金額"
-        tbody ->
-          for account in *@accounts
+        tbody id:"table-body", ->
+          for account in *@accounts\get_page 1
             tr ->
               td class:{"center"}, ->
                 text account.date
                 a class:{"ui", "mini", "blue", "label", "detail"}, ["data-value"]:"#{account.id}", "info"
-              td class:{"center"}, account\get_kind!.kind
+              td class:{"center"}, account.kind
               td class:{"center"}, "￥ #{account.amount}"
         tfoot ->
           tr ->
             th colspan:"3", ->
               div class:{"ui", "right", "floated", "pagination", "menu"}, ->
-                a class:{"icon", "item"}, ->
+                a class:{"icon", "item"}, id:"left-page", ["data-value"]:"1", ->
                   i class:{"left", "chevron", "icon"}
-                a class:{"item"}, "1"
-                a class:{"item"}, "2"
-                a class:{"item"}, "3"
-                a class:{"item"}, "4"
-                a class:{"icon", "item"}, ->
+                for i = 1, @accounts\num_pages!
+                  a class:{"item", (if i == 1 then "active" else ""), "page-button"}, ["data-value"]:"#{i}", "#{i}"
+                a class:{"icon", "item"}, id:"right-page", ["data-value"]:"#{@accounts\num_pages!}", ->
                   i class:{"right", "chevron", "icon"}
       @create_detail_modal!
       @create_delete_modal!

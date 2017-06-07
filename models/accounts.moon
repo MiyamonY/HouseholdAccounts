@@ -33,7 +33,6 @@ class Accounts extends Model
     -- preload
     Members\include_in {@}, "member_id"
     Kinds\include_in {@}, "kind_id"
-    print "#{to_json(@)}"
     {id:@.id, amount: @.amount, date:@.date, member:@.member.member, kind:@.kind.kind,
       input_date:@.input_date, etc:@.etc}
 

@@ -1,6 +1,7 @@
 lapis = require "lapis"
 db = require "lapis.db"
 util = require "lapis.util"
+console = require "lapis.console"
 
 import respond_to from require "lapis.application"
 import Accounts, Kinds, Members, Tags from require "models"
@@ -31,3 +32,5 @@ class extends lapis.Application
     for account in *accounts
       @last_total += account.amount
     render: true
+
+  "/console": console.make!

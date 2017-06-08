@@ -1,6 +1,6 @@
 import Model,enum,preload from require "lapis.db.model"
 import Members, Kinds from require "models"
-import to_json from require "lapis.util"
+import print_as_json from require "util"
 
 class Accounts extends Model
   @relations: {
@@ -12,7 +12,7 @@ class Accounts extends Model
     payment: 1
   }
 
-  select_by_date: (year, month, day) =>
+  @select_by_date: (year, month, day) =>
     not_nil = false
     where = "where "
     if year
@@ -27,12 +27,13 @@ class Accounts extends Model
       if not_nil
         where = where .. " and "
       where = where .. "EXTRACT(DAY FROM date) = #{day}"
-    Accounts\select where
+    @@\select where
 
   to_json_data:  =>
     -- preload
     Members\include_in {@}, "member_id"
     Kinds\include_in {@}, "kind_id"
+    print_as_json @
     {id:@.id, amount: @.amount, date:@.date, member:@.member.member, kind:@.kind.kind,
       input_date:@.input_date, etc:@.etc}
 

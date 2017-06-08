@@ -3,9 +3,8 @@ db = require "lapis.db"
 
 import respond_to from require "lapis.application"
 import Accounts, Kinds, Members, Tags from require "models"
-import Message from require "views.util.message"
+import AccountMessage from require "views.util.message"
 import Line from require "line"
-import to_json from require "lapis.util"
 import map from require "util"
 
 class Account extends lapis.Application
@@ -27,7 +26,10 @@ class Account extends lapis.Application
       if @params.delete
         account = Accounts\find @params.delete
         account\delete!
-        @session.messages = {Message("info", "削除", {"削除しました"})}
+        message = AccountMessage(AccountMessage.types.delete, "削除", account)
+        @session.messages = {message\for_session!}
+        line = Line message
+        line\notify_to Members.send_notification!
         redirect_to: @url_for("account_list")
       elseif @params.correct
         return redirect_to: @url_for("account_correct", id: @params.correct)
@@ -56,7 +58,10 @@ class Account extends lapis.Application
       @account.amount = @params.amount
       @account.etc = @params.etc or ""
       @account\update "type", "date", "member_id", "kind_id", "amount", "etc"
-      @session.messages = {Message("info", "修正", {"修正しました"})}
+      message = AccountMessage(AccountMessage.types.correct, "修正", @account)
+      @session.messages = {message\for_session!}
+      line = Line message
+      line\notify_to Members.send_notification!
       redirect_to: @url_for "account_list"
   }
 
@@ -69,7 +74,7 @@ class Account extends lapis.Application
     render: "account.input"
 
   POST: =>
-    Accounts\create {
+    account = Accounts\create {
       type: Accounts.types.payment
       date: @params.date
       member_id: @params.member
@@ -78,12 +83,10 @@ class Account extends lapis.Application
       etc: @params.etc or ""
       input_date: db.format_date!
     }
-    message = Message("info", "追加", {"追加しました"})
-    @session.messages = {message}
-    members = Members.send_notification!
-    if members
-      line = Line message
-      line\notify_to members
+    message = AccountMessage(AccountMessage.types.add, "追加", account)
+    @session.messages = {message\for_session!}
+    line = Line message
+    line\notify_to Members.send_notification!
     redirect_to: @url_for "account_list"
   }
 
@@ -103,8 +106,9 @@ class Account extends lapis.Application
 
   "/accounts/sum": =>
     params = @req.params_get
-    from_ = params["from"] or 2017
-    to = params["to"] or 2017
+    this = os.date "*t"
+    from_ = params["from"] or this.year
+    to = params["to"] or this.year
     data = {}
     for year = from_, to
       amounts = {}

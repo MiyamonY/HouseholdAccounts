@@ -20,8 +20,9 @@ class Member extends lapis.Application
     POST: =>
       if @params.delete
         member = Members\find @params.delete
-        member.deleted = db.TRUE
-        member\update "deleted"
+        member\update {
+          deleted: db.TRUE
+        }
         @session.messages = {Message("info", "削除", {"削除しました:#{member.member}"})}
       redirect_to: @url_for "member_list"
   }

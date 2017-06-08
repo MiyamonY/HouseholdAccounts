@@ -51,13 +51,14 @@ class Account extends lapis.Application
       render: "account.correct"
 
     POST: =>
-      @account.type = @params.type
-      @account.date = @params.date
-      @account.member_id = @params.member
-      @account.kind_id = @params.kind
-      @account.amount = @params.amount
-      @account.etc = @params.etc or ""
-      @account\update "type", "date", "member_id", "kind_id", "amount", "etc"
+      @account\update {
+        type: @params.type
+        date: @params.date
+        member_id: @params.member
+        kind_id: @params.kind
+        amount: @params.amount
+        etc: @params.etc or ""
+      }
       message = AccountMessage(AccountMessage.types.correct, "修正", @account)
       @session.messages = {message\for_session!}
       line = Line message

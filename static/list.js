@@ -51,7 +51,7 @@ $(function(){
 
     attach_detail_show_event();
 
-    $("button[name=delete]").click(function(e) {
+    $("#detail-delete").click(function(e) {
         var button = this;
         $("#delete-confirm").modal({
             onDeny: function(){
@@ -64,11 +64,9 @@ $(function(){
         ).modal('show');
     });
 
-    $("button[name=correct]").click(function(e) {
-        var button = this;
-        $("<input>").attr("type", "hidden")
-            .attr("name", button.name).val(button.value).appendTo("#form");
-        $("#form").submit();
+    $("#detail-correct").click(function(e) {
+        var button = $(this);
+        window.location.href = "/account/correct/" + button.attr("value");
     });
 
     $("a.page-button").click(function(e){

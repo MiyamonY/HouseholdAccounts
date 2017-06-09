@@ -28,8 +28,8 @@ class DetailModal
               td class:{"center"}, "入力日"
               td class:{"center"}, id:"detail-input-date"
       div class:{"actions"}, ->
-        button class:{"ui", "positive", "basic", "button"}, type:"button", id:"detail-correct", name:"correct", "修正"
-        button class:{"ui", "negative", "basic", "button"}, type:"button", id:"detail-delete", name:"delete", "削除"
+        button class:{"ui", "positive", "basic", "button"}, type:"button", id:"detail-correct", value:"", "修正"
+        button class:{"ui", "negative", "basic", "button"}, type:"button", id:"detail-delete", value:"", name:"delete", "削除"
 
 class List extends Widget
   @include DetailModal

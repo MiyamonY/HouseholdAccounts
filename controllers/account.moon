@@ -11,60 +11,26 @@ class Account extends lapis.Application
   @path: "/account"
   @name: "account_"
 
-  [list: "/list"]:  respond_to {
-    GET: =>
-      @page_title = "入出金一覧"
-      @accounts = Accounts\paginated [[order by date desc]], {per_page:10,
-        prepare_results: (accounts) ->
-          map accounts, (account) -> account\to_json_data!
-      }
-      @messages =  @session.messages
-      @session.messages = nil
-      render: "account.list"
+  find_account: (id) =>
+    @account = Accounts\find id
+    @write status:404, "account(no.#{id}) not found" unless @account
 
-    POST: =>
-      if @params.delete
-        account = Accounts\find @params.delete
-        account\delete!
-        message = AccountMessage(AccountMessage.types.delete, "削除", account)
-        @session.messages = {message\for_session!}
-        line = Line message
-        line\notify_to Members.send_notification!
-        redirect_to: @url_for("account_list")
-      elseif @params.correct
-        return redirect_to: @url_for("account_correct", id: @params.correct)
-      else
-        @write status:404, "account(no.#{id}) not found"
-  }
+  notify_message: (message) =>
+    line = Line message
+    line\notify_to Members.send_notification!
 
-  [correct: "/correct/:id[%d]"]: respond_to {
-    before: =>
-      id = @params.id
-      @account = Accounts\find id
-      @write status:404, "account(no.#{id}) not found" unless @account
+  set_to_session: (message) =>
+    @session.messages = {message\for_session!}
 
-    GET: =>
-      @page_title = "出入金修正"
-      @kinds = Kinds\select!
-      @members = Members\select!
-      @tags = Tags\select!
-      render: "account.correct"
-
-    POST: =>
-      @account\update {
-        type: @params.type
-        date: @params.date
-        member_id: @params.member
-        kind_id: @params.kind
-        amount: @params.amount
-        etc: @params.etc or ""
-      }
-      message = AccountMessage(AccountMessage.types.correct, "修正", @account)
-      @session.messages = {message\for_session!}
-      line = Line message
-      line\notify_to Members.send_notification!
-      redirect_to: @url_for "account_list"
-  }
+  [list: "/list"]: =>
+    @page_title = "入出金一覧"
+    @accounts = Accounts\paginated [[order by date desc]], {per_page:10,
+      prepare_results: (accounts) ->
+        map accounts, (account) -> account\to_json_data!
+    }
+    @messages =  @session.messages
+    @session.messages = nil
+    render: "account.list"
 
   [input: "/input"]: respond_to {
   GET: =>
@@ -85,10 +51,47 @@ class Account extends lapis.Application
       input_date: db.format_date!
     }
     message = AccountMessage(AccountMessage.types.add, "追加", account)
-    @session.messages = {message\for_session!}
-    line = Line message
-    line\notify_to Members.send_notification!
+    @set_to_session message
+    @notify_to_line message
     redirect_to: @url_for "account_list"
+  }
+
+  [delete: "/delete/:id[%d]"] : respond_to {
+    before: =>
+    @find_account @params.id
+
+    POST: =>
+      @account\delete!
+      message = AccountMessage(AccountMessage.types.delete, "削除", account)
+      @set_to_session message
+      @notify_to_line message
+      redirect_to: @url_for("account_list")
+  }
+
+  [correct: "/correct/:id[%d]"]: respond_to {
+    before: =>
+      @find_account @params.id
+
+    GET: =>
+      @page_title = "出入金修正"
+      @kinds = Kinds\select!
+      @members = Members\select!
+      @tags = Tags\select!
+      render: "account.correct"
+
+    POST: =>
+      @account\update {
+        type: @params.type
+        date: @params.date
+        member_id: @params.member
+        kind_id: @params.kind
+        amount: @params.amount
+        etc: @params.etc or ""
+      }
+      message = AccountMessage(AccountMessage.types.correct, "修正", @account)
+      @set_to_session message
+      @notify_to_line message
+      redirect_to: @url_for "account_list"
   }
 
   "/account": =>

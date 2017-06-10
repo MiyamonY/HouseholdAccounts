@@ -11,6 +11,11 @@ class Member extends lapis.Application
   @path: "/member"
   @name: "member_"
 
+  validation_check: (params) ->
+    assert_valid params, {
+      {"name", "名前を入力して下さい", exists:true, type:"string"}
+    }
+
   [list: "/list"]: respond_to {
     GET: =>
       @members = Members\select!
@@ -21,9 +26,9 @@ class Member extends lapis.Application
     POST: =>
       member = Members\delete_by_id @params.delete
       if member
-        @session.messages = {Message("info", "削除", {"削除しました:#{member.member}"})}
+        @session.messages = {Message("info", "削除", {"削除しました:#{member.member}"})\for_session!}
       else
-        @session.messages = {Message(Message.types.db_error, "エラー", {"削除に失敗しました"})}
+        @session.messages = {Message(Message.types.db_error, "エラー", {"削除に失敗しました"})\for_session!}
       redirect_to: @url_for "member_list"
   }
 
@@ -35,9 +40,8 @@ class Member extends lapis.Application
 
     POST: capture_errors {
       =>
-        assert_valid @params, {
-          {"name", "名前を入力して下さい", exists:true, type:"string"}
-        }
+        Member.validation_check @params
+
         Members\create {
           member: @params.name
           token: if @params.token then @params.token else nil
@@ -57,17 +61,27 @@ class Member extends lapis.Application
   [correct: "/correct/:id[%d]"]: respond_to {
     before: =>
       @member = Members\find @params.id
-      @write status:404, "member(no.#{id}) not found" unless @member
+      @write status:404, "member(no.#{@params.id}) not found" unless @member
 
     GET: =>
+      @messages =  @session.messages
+      @session.messages = nil
       render: "member.correct"
 
-    POST: =>
-      @member\update {
-        token: @params.token
-        send: if @params.send == "on" then db.TRUE else db.FALSE
-      }
+    POST: capture_errors {
+      =>
+        Member.validation_check @params
 
-      @session.messages = {Message("info", "修正", {"修正しました:#{@params.token}"})}
-      redirect_to: @url_for "member_list"
+        @member\update {
+          token: @params.token
+          send: if @params.send == "on" then db.TRUE else db.FALSE
+        }
+
+        @session.messages = {Message("info", "修正", {"修正しました:#{@params.token}"})\for_session!}
+        redirect_to: @url_for "member_list"
+
+      on_error: =>
+        @session.messages = {Message(Message.types.validation_error, "エラー", @errors)\for_session!}
+        redirect_to: @url_for("member_correct", id:@params.id)
+      }
   }

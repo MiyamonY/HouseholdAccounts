@@ -18,5 +18,9 @@ class Create extends Widget
         div class:{"ui", "toggle", "checkbox"}, ->
           input name:"send", type:"checkbox"
           label "通知する"
+      div class:{"ui", "error", "message"}
       button class:{"ui", "positive", "basic", "button"}, type:"submit", "追加"
       a class:{"ui", "negative", "basic", "button"}, href:@url_for("member_list"), "戻る"
+
+    @content_for "tail_scripts", ->
+      script src:"/static/member_create.js"

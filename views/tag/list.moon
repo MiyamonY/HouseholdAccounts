@@ -7,11 +7,12 @@ class TagAddModalWidget
     div class:{"ui", "small", "modal"}, id:"tag-add", ->
       div class:{"header"}, "タグ追加"
       div class:{"content"}, ->
-        form class:{"ui", "form"}, method:"post", ->
+        form class:{"ui", "form"}, method:"post", id:"tag-add-form", ->
           div class:{"required", "field"}, ->
             label "タグ名"
             input name:"name", type:"text", placeholder:"店名等"
           div class:{"actions"}, ->
+            div class:{"ui", "error", "message"}
             button class:{"ui", "positive", "basic", "button"}, type:"submit", "追加"
             div class:{"ui", "negative",  "basic", "button"}, "キャンセル"
 
@@ -27,7 +28,7 @@ class List extends Widget
         a class:{"ui", "teal", "circular", "huge", "label"}, id:"tag-add-show", ->
           i class:{"plus", "fitted", "icon"}
       @create_message @messages
-      form method:"post", id:"form", action:"/tag/delete" ->
+      form method:"post", id:"form", action:@url_for("tag_delete"), ->
         element "table", class:{"ui", "sortable", "unstackable", "celled", "table"}, ->
           thead ->
             tr ->

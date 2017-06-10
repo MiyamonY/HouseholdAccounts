@@ -36,13 +36,13 @@ class Tag extends lapis.Application
     }
   }
 
-  [delete:"/delete"]: respond_to {
-    before: ->
+  [delete: "/delete"]: respond_to {
+    before: =>
       @tag = Tags\find @params.delete
-      request.write status:404, "tag(no.#{@params.delete}) not found" unless @tag
+      @write status:404, "tag(no.#{@params.delete}) not found" unless @tag
 
     POST: =>
       @tag\delete!
-      @session.messages = {Message("info", "削除", {"削除しました:#{tag.name}"})}
+      @session.messages = {Message("info", "削除", {"削除しました:#{@tag.name}"})}
       redirect_to: @url_for "tag_list"
   }

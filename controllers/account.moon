@@ -90,6 +90,7 @@ class Account extends lapis.Application
       @kinds = Kinds\select!
       @members = Members\select!
       @tags = Tags\select!
+      Account.render_message @
       render: "account.correct"
 
     POST: capture_errors {
@@ -111,7 +112,8 @@ class Account extends lapis.Application
         redirect_to: @url_for "account_list"
 
       on_error: =>
-        @write status:404, @errors
+        Account.set_to_session @, {Message(Message.types.validation_error, "エラー", @errors)}
+        redirect_to: @url_for "account_correct", id:@params.id
     }
   }
 

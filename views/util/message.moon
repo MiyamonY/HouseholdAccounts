@@ -7,6 +7,7 @@ class Message
     add: 1
     correct: 2
     delete: 3
+    validation_error:4
   }
 
   color: =>
@@ -16,6 +17,8 @@ class Message
       when @@.types.correct
         "yellow"
       when @@.types.delete
+        "red"
+      when @@.types.validation_error
         "red"
       else
         "brown"
@@ -52,12 +55,14 @@ class AccountMessage extends Message
       }, "\n"
 
 class MessageWidget
-  create_message: (message) =>
-    div class:{"ui", message.color, "message"}, ->
-      i class:{"close", "icon"}
-      div class:"header", message.header
-      ul class:"list", ->
-        for mes in *message.messages
-          li mes
+  create_message: (messages) =>
+    if messages
+      for message in *messages
+        div class:{"ui", message.color, "message"}, ->
+          i class:{"close", "icon"}
+          div class:"header", message.header
+          ul class:"list", ->
+            for mes in *message.messages
+              li mes
 
 {:AccountMessage, :Message, :MessageWidget}

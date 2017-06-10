@@ -58,8 +58,8 @@ $(function(){
             },
             onApprove : function() {
                 $("<input>").attr("type", "hidden")
-                    .attr("name", button.name).val(button.value).appendTo("#form");
-                $("#form").submit();
+                    .attr("name", button.name).val(button.value).appendTo("#delete-form");
+                $("#delete-form").submit();
             }}
         ).modal('show');
     });

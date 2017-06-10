@@ -12,9 +12,7 @@ class List extends Widget
         text "メンバー一覧"
         a class:{"ui", "teal", "circular", "huge", "label"}, href:@url_for("member_create"), ->
           i class:{"plus", "fitted", "icon"}
-      if @messages
-        for message in *@messages
-          @create_message message
+      @create_message @messages
       form method:"post", id:"form", ->
         element "table", class:{"ui", "sortable", "unstackable", "celled", "table"}, ->
           thead ->

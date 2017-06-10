@@ -26,9 +26,7 @@ class List extends Widget
         text "タグ編集"
         a class:{"ui", "teal", "circular", "huge", "label"}, id:"tag-add-show", ->
           i class:{"plus", "fitted", "icon"}
-      if @messages
-        for message in *@messages
-          @create_message message
+      @create_message @messages
       form method:"post", id:"form", ->
         element "table", class:{"ui", "sortable", "unstackable", "celled", "table"}, ->
           thead ->

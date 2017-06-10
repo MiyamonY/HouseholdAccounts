@@ -1,26 +1,41 @@
 lapis = require "lapis"
 db = require "lapis.db"
 
-import respond_to from require "lapis.application"
+import respond_to, capture_errors from require "lapis.application"
+import assert_valid from require "lapis.validate"
 import Accounts, Kinds, Members, Tags from require "models"
-import AccountMessage from require "views.util.message"
+import Message, AccountMessage from require "views.util.message"
 import Line from require "line"
 import map from require "util"
+import print_as_json from require "util"
 
 class Account extends lapis.Application
   @path: "/account"
   @name: "account_"
 
-  find_account: (id) =>
-    @account = Accounts\find id
-    @write status:404, "account(no.#{id}) not found" unless @account
+  find_account: (request, id) ->
+    request.account = Accounts\find id
+    request.write status:404, "account(no.#{id}) not found" unless request.account
 
-  notify_message: (message) =>
+  notify_to_line: (message) ->
     line = Line message
     line\notify_to Members.send_notification!
 
-  set_to_session: (message) =>
-    @session.messages = {message\for_session!}
+  set_to_session: (request, messages) ->
+    for_session = (message) -> message\for_session!
+    request.session.messages = map messages, for_session
+
+  render_message: (request) ->
+    request.messages =  request.session.messages
+    request.session.messages = nil
+
+  validation_input: (params) ->
+    assert_valid params, {
+      {"date", "日付を入力して下さい", exists:true}
+      {"member", "支払い者を入力して下さい", exists:true, is_integer:true}
+      {"kind", "項目を入力して下さい", exists:true, is_integer:true}
+      {"amount", "金額を入力して下さい", exists:true, is_integer:true}
+    }
 
   [list: "/list"]: =>
     @page_title = "入出金一覧"
@@ -28,49 +43,47 @@ class Account extends lapis.Application
       prepare_results: (accounts) ->
         map accounts, (account) -> account\to_json_data!
     }
-    @messages =  @session.messages
-    @session.messages = nil
+    Account.render_message @
     render: "account.list"
 
   [input: "/input"]: respond_to {
-  GET: =>
-    @page_title = "出金入力"
-    @kinds = Kinds\select!
-    @members = Members\select!
-    @tags = Tags\select!
-    render: "account.input"
+    GET: =>
+      @page_title = "出金入力"
+      @kinds = Kinds\select!
+      @members = Members\select!
+      @tags = Tags\select!
+      Account.render_message @
+      render: "account.input"
 
-  POST: =>
-    account = Accounts\create {
-      type: Accounts.types.payment
-      date: @params.date
-      member_id: @params.member
-      kind_id: @params.kind
-      amount: @params.amount
-      etc: @params.etc or ""
-      input_date: db.format_date!
+    POST: capture_errors {
+      =>
+        Account.validation_input @params
+
+        account = Accounts\create {
+          type: Accounts.types.payment
+          date: @params.date
+          member_id: @params.member
+          kind_id: @params.kind
+          amount: @params.amount
+          etc: @params.etc or ""
+          input_date: db.format_date!
+        }
+
+        message = AccountMessage(AccountMessage.types.add, "追加", account)
+        Account.set_to_session @, {message}
+        Account.notify_to_line message
+        redirect_to: @url_for "account_list"
+
+      on_error: =>
+        messages = map @errors, (error) -> Message(Message.types.validation_error, "エラー", {error})
+        Account.set_to_session @, messages
+        redirect_to: @url_for "account_input"
     }
-    message = AccountMessage(AccountMessage.types.add, "追加", account)
-    @set_to_session message
-    @notify_to_line message
-    redirect_to: @url_for "account_list"
-  }
-
-  [delete: "/delete/:id[%d]"] : respond_to {
-    before: =>
-    @find_account @params.id
-
-    POST: =>
-      @account\delete!
-      message = AccountMessage(AccountMessage.types.delete, "削除", account)
-      @set_to_session message
-      @notify_to_line message
-      redirect_to: @url_for("account_list")
   }
 
   [correct: "/correct/:id[%d]"]: respond_to {
     before: =>
-      @find_account @params.id
+      Account.find_account @, @params.id
 
     GET: =>
       @page_title = "出入金修正"
@@ -79,20 +92,41 @@ class Account extends lapis.Application
       @tags = Tags\select!
       render: "account.correct"
 
-    POST: =>
-      @account\update {
-        type: @params.type
-        date: @params.date
-        member_id: @params.member
-        kind_id: @params.kind
-        amount: @params.amount
-        etc: @params.etc or ""
-      }
-      message = AccountMessage(AccountMessage.types.correct, "修正", @account)
-      @set_to_session message
-      @notify_to_line message
-      redirect_to: @url_for "account_list"
+    POST: capture_errors {
+      =>
+        Account.validation_input @params
+
+        @account\update {
+          type: @params.type
+          date: @params.date
+          member_id: @params.member
+          kind_id: @params.kind
+          amount: @params.amount
+          etc: @params.etc or ""
+        }
+
+        message = AccountMessage(AccountMessage.types.correct, "修正", @account)
+        Account.set_to_session @, {message}
+        Account.notify_to_line message
+        redirect_to: @url_for "account_list"
+
+      on_error: =>
+        @write status:404, @errors
+    }
   }
+
+  [delete: "/delete"]: respond_to {
+    before: =>
+      Account.find_account @, @params.delete
+
+    POST: =>
+      @account\delete!
+      message = AccountMessage(AccountMessage.types.delete, "削除", @account)
+      Account.set_to_session @, {message}
+      Account.notify_to_line message
+      redirect_to: @url_for("account_list")
+  }
+
 
   "/account": =>
     id = @req.params_get.id

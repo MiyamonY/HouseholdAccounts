@@ -42,9 +42,7 @@ class List extends Widget
         text "使ったお金一覧"
         a class:{"ui", "teal", "circular", "huge", "label"}, href:@url_for("account_input"), ->
           i class:{"plus", "fitted", "icon"}
-      if @messages
-        for message in *@messages
-          @create_message message
+      @create_message @messages
       element "table", class:{"ui", "sortable", "unstackable", "celled", "table"}, ->
         thead ->
           tr ->
@@ -72,7 +70,7 @@ class List extends Widget
       @create_detail_modal!
       @create_delete_modal!
 
-      form method:"post", id:"form"
+      form method:"post", id:"delete-form", action:"/account/delete"
 
     @content_for "tail_scripts", ->
       script src:"/static/list.js"

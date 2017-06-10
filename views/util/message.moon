@@ -8,6 +8,7 @@ class Message
     correct: 2
     delete: 3
     validation_error:4
+    db_error: 5
   }
 
   color: =>
@@ -19,6 +20,8 @@ class Message
       when @@.types.delete
         "red"
       when @@.types.validation_error
+        "red"
+      when @@.types.db_error
         "red"
       else
         "brown"

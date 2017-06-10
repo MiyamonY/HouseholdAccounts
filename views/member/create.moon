@@ -1,8 +1,12 @@
 import Widget from require "lapis.html"
+import MessageWidget from require "views.util.message"
 
 class Create extends Widget
+  @include MessageWidget
+
   content: =>
     h1 class:{"header"}, "メンバー追加"
+    @create_message @messages
     form class:{"ui", "form"}, method:"post", ->
       div class:{"required", "field"}, ->
         label "名前"

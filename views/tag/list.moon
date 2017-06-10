@@ -27,7 +27,7 @@ class List extends Widget
         a class:{"ui", "teal", "circular", "huge", "label"}, id:"tag-add-show", ->
           i class:{"plus", "fitted", "icon"}
       @create_message @messages
-      form method:"post", id:"form", ->
+      form method:"post", id:"form", action:"/tag/delete" ->
         element "table", class:{"ui", "sortable", "unstackable", "celled", "table"}, ->
           thead ->
             tr ->

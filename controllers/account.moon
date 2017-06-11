@@ -8,6 +8,7 @@ import Message, AccountMessage from require "views.util.message"
 import Line from require "line"
 import map from require "util"
 import print_as_json from require "util"
+import Session from require "controllers.session"
 
 class Account extends lapis.Application
   @path: "/account"
@@ -20,14 +21,6 @@ class Account extends lapis.Application
   notify_to_line: (message) ->
     line = Line message
     line\notify_to Members.send_notification!
-
-  set_to_session: (request, messages) ->
-    for_session = (message) -> message\for_session!
-    request.session.messages = map messages, for_session
-
-  render_message: (request) ->
-    request.messages =  request.session.messages
-    request.session.messages = nil
 
   validation_input: (params) ->
     assert_valid params, {
@@ -43,7 +36,8 @@ class Account extends lapis.Application
       prepare_results: (accounts) ->
         map accounts, (account) -> account\to_json_data!
     }
-    Account.render_message @
+    session = Session @session
+    @messages = session\pop_messages!
     render: "account.list"
 
   [input: "/input"]: respond_to {
@@ -52,7 +46,8 @@ class Account extends lapis.Application
       @kinds = Kinds\select!
       @members = Members\select!
       @tags = Tags\select!
-      Account.render_message @
+      session = Session @session
+      @messages = session\pop_messages!
       render: "account.input"
 
     POST: capture_errors {
@@ -70,13 +65,14 @@ class Account extends lapis.Application
         }
 
         message = AccountMessage(AccountMessage.types.add, "追加", account)
-        Account.set_to_session @, {message}
+        session = Session @session
+        session\push_messages {message}
         Account.notify_to_line message
         redirect_to: @url_for "account_list"
 
       on_error: =>
-        messages = map @errors, (error) -> Message(Message.types.validation_error, "エラー", {error})
-        Account.set_to_session @, messages
+        session = Session @session
+        session\push_messages {Message(Message.types.validation_error, "エラー", {@errors})}
         redirect_to: @url_for "account_input"
     }
   }
@@ -90,7 +86,8 @@ class Account extends lapis.Application
       @kinds = Kinds\select!
       @members = Members\select!
       @tags = Tags\select!
-      Account.render_message @
+      session = Session @session
+      @messages = session\pop_messages!
       render: "account.correct"
 
     POST: capture_errors {
@@ -107,12 +104,14 @@ class Account extends lapis.Application
         }
 
         message = AccountMessage(AccountMessage.types.correct, "修正", @account)
-        Account.set_to_session @, {message}
+        session = Session @session
+        session\push_messages {message}
         Account.notify_to_line message
         redirect_to: @url_for "account_list"
 
       on_error: =>
-        Account.set_to_session @, {Message(Message.types.validation_error, "エラー", @errors)}
+        session = Session @session
+        session\push_messages {Message(Message.types.validation_error, "エラー", @errors)}
         redirect_to: @url_for "account_correct", id:@params.id
     }
   }
@@ -124,7 +123,8 @@ class Account extends lapis.Application
     POST: =>
       @account\delete!
       message = AccountMessage(AccountMessage.types.delete, "削除", @account)
-      Account.set_to_session @, {message}
+      session = Session @session
+      session\push_messages {message}
       Account.notify_to_line message
       redirect_to: @url_for("account_list")
   }

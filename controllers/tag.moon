@@ -6,6 +6,7 @@ import Tags from require "models"
 import Message from require "views.util.message"
 import map from require "util"
 import print_as_json from require "util"
+import Session from require "controllers.session"
 
 class Tag extends lapis.Application
   @path: "/tag"
@@ -14,8 +15,8 @@ class Tag extends lapis.Application
   [list: "/list"]: respond_to {
     GET: =>
       @tags = Tags\select!
-      @messages =  @session.messages
-      @session.messages = nil
+      session = Session @session
+      @messages = session\pop_messages!
       render: "tag.list"
 
     POST: capture_errors {
@@ -25,12 +26,14 @@ class Tag extends lapis.Application
         }
 
         Tags\create { name:@params.name, color:Tags.colors\for_db "blue" }
-        @session.messages = {Message("info", "追加", {"追加しました:#{@params.name}"})}
+
+        session = Session @session
+        session\push_messages {Message("info", "追加", {"追加しました:#{@params.name}"})}
         redirect_to: @url_for "tag_list"
 
       on_error: =>
-        msg = Message(Message.types.validation_error, "エラー", @errors)
-        @session.messages = {msg\for_session!}
+        session = Session @session
+        session\push_messages {Message(Message.types.validation_error, "エラー", @errors)}
         print_as_json msg
         redirect_to: @url_for "tag_list"
     }
@@ -43,6 +46,7 @@ class Tag extends lapis.Application
 
     POST: =>
       @tag\delete!
-      @session.messages = {Message("info", "削除", {"削除しました:#{@tag.name}"})}
+      session = Session @session
+      session\push_messages {Message("info", "削除", {"削除しました:#{@tag.name}"})}
       redirect_to: @url_for "tag_list"
   }

@@ -5,6 +5,7 @@ import respond_to, capture_errors from require "lapis.application"
 import assert_valid from require "lapis.validate"
 import Members from require "models"
 import Message from require "views.util.message"
+import Session from require "controllers.session"
 import print_as_json from require "util"
 
 class Member extends lapis.Application
@@ -19,23 +20,25 @@ class Member extends lapis.Application
   [list: "/list"]: respond_to {
     GET: =>
       @members = Members\select!
-      @messages =  @session.messages
-      @session.messages = nil
+      session = Session @session
+      @messages = session\pop_messages!
       render: "member.list"
 
     POST: =>
       member = Members\delete_by_id @params.delete
-      if member
-        @session.messages = {Message("info", "削除", {"削除しました:#{member.member}"})\for_session!}
-      else
-        @session.messages = {Message(Message.types.db_error, "エラー", {"削除に失敗しました"})\for_session!}
+      message = if member
+          Message("info", "削除", {"削除しました:#{member.member}"})
+        else
+          Message(Message.types.db_error, "エラー", {"削除に失敗しました"})
+      session = Session @session
+      session\push_messages {message}
       redirect_to: @url_for "member_list"
   }
 
   [create: "/create"]: respond_to {
     GET: =>
-      @messages =  @session.messages
-      @session.messages = nil
+      session = Session @session
+      @messages = session\pop_messages!
       render: "member.create"
 
     POST: capture_errors {
@@ -49,11 +52,15 @@ class Member extends lapis.Application
           deleted: db.FALSE
           send: if @params.send == "on" then db.TRUE else db.FALSE
         }
-        @session.messages = {Message("info", "追加", {"追加しました:#{@params.name}"})\for_session!}
+
+        session = Session @session
+        session\push_messages {Message("info", "追加", {"追加しました:#{@params.name}"})}
+
         redirect_to: @url_for "member_list"
 
       on_error: =>
-        @session.messages = {Message(Message.types.validation_error, "エラー", @errors)\for_session!}
+        session = Session @session
+        session\push_messages {Message(Message.types.validation_error, "エラー", @errors)}
         redirect_to: @url_for "member_create"
     }
   }
@@ -77,11 +84,15 @@ class Member extends lapis.Application
           send: if @params.send == "on" then db.TRUE else db.FALSE
         }
 
-        @session.messages = {Message("info", "修正", {"修正しました:#{@params.token}"})\for_session!}
+        session = Session @session
+        session\push_messages {Message("info", "修正", {"修正しました:#{@params.token}"})}
+
         redirect_to: @url_for "member_list"
 
       on_error: =>
-        @session.messages = {Message(Message.types.validation_error, "エラー", @errors)\for_session!}
+        session = Session @session
+        session\push_messages {Message(Message.types.validation_error, "エラー", @errors)}
+
         redirect_to: @url_for("member_correct", id:@params.id)
       }
   }

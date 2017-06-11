@@ -136,13 +136,16 @@ class Account extends lapis.Application
     json: account\to_json_data!
 
   "/accounts": =>
-    account_page = Accounts\paginated [[order by date desc]], {per_page:10,
+    num = @params.num
+    account_page = Accounts\paginated [[order by date desc]], {per_page:num,
         prepare_results: (accounts) ->
           map accounts, (account) -> account\to_json_data!
     }
     page = @req.params_get.page
-    accounts = account_page\get_page if page then page else 1
-    json: accounts
+    data = {}
+    data.num = account_page\num_pages!
+    data.accounts = account_page\get_page if page then page else 1
+    json: data
 
   "/accounts/sum": =>
     params = @req.params_get

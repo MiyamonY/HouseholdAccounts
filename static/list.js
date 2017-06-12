@@ -49,22 +49,48 @@ function attach_detail_show_event()
 function update_pagination_menu(num)
 {
     var pagination_menu = $("#pagination-menu").empty();
-    if(1 < num ){
-        var arr1 = ['<div class="ui right floated pagination menu">',
+
+    if (num <= 1) return;
+
+    var pre = ['<div class="ui right floated mini pagination menu">',
                     '  <a class="icon item" id="left-page" data-value="1">',
                     '    <i class="left chevron icon"></i>',
-                    '  </a>'];
-        for(var i = 0; i < num; i++){
-						var index	 = i + 1;
-						arr1 = arr1.concat(['<a class="item page-button" data-value="' + index+ '">' + index + '</a>']);
-				}
-        var arr2  = ['  <a class="icon item" id="right-page" data-value="' + num + '">',
-                     '    <i class="right chevron icon"></i>',
-                     '  </a>',
-                     '</div>'];
-        var str = arr1.concat(arr2).join('\n')
-        pagination_menu.append($(str));
+               '  </a>'];
+    var post = ['  <a class="icon item" id="right-page" data-value="' + num + '">',
+                '    <i class="right chevron icon"></i>',
+                '  </a>',
+                '</div>'];
+
+    if (num <= 5) {
+        for(var i = 0; i < num; i++) {
+				    var index	 = i + 1;
+				    pre = pre.concat(['<a class="item page-button" data-value="' + index+ '">' + index + '</a>']);
+        }
+		} else {
+        if(page <= 3){
+            for(var i = 0; i < 3; i++) {
+				        var index	 = i + 1;
+				        pre = pre.concat(['<a class="item page-button" data-value="' + index+ '">' + index + '</a>']);
+            }
+            pre = pre.concat(['<a class="item disabled">...</a>']);
+        } else if ((num - 3) < page ){
+            pre = pre.concat(['<a class="item disabled">...</a>']);
+            for(var i = (num - 3); i  < num; i++) {
+				        var index	 = i + 1;
+				        pre = pre.concat(['<a class="item page-button" data-value="' + index+ '">' + index + '</a>']);
+            }
+        } else{
+            pre = pre.concat(['<a class="item page-button" data-value="' + 1 + '">' + 1 + '</a>']);
+            pre = pre.concat(['<a class="item disabled">...</a>']);
+            pre = pre.concat(['<a class="item page-button" data-value="' + page + '">' + page + '</a>'])
+            pre = pre.concat(['<a class="item disabled">...</a>']);
+            pre = pre.concat(['<a class="item page-button" data-value="' + num + '">' + num + '</a>']);
+        }
     }
+
+    var str = pre.concat(post).join('\n')
+    pagination_menu.append($(str));
+
     attach_event_to_pagination_button();
 }
 

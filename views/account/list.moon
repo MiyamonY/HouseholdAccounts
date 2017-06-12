@@ -46,7 +46,7 @@ class List extends Widget
       div class:{"ui", "basic", "segment"}, ->
         div class:{"ui", "right", "floated", "mini", "teal", "buttons"}, ->
           div class:{"ui", "right", "page", "button"}, "表示数"
-          for i in *{10, 30, 50, 100}
+          for i in *{10, 20, 50, 100}
             div class:{"ui", "right", "clickable", "page", "button", if i == 10 then "active" else ""}, ["data-value"]:"#{i}", "#{i}"
       div class:{"ui", "basic", "segment"}, ->
         div class:{"ui", "active","loader"}, id:"table-loader"

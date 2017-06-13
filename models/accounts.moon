@@ -36,6 +36,14 @@ class Accounts extends Model
     {id:@.id, amount: @.amount, date:@.date, member:@.member.member, kind:@.kind.kind,
       input_date:@.input_date, etc:@.etc}
 
+  breakdown_in: (year) =>
+    import Kinds from require "models"
+    ret = {}
+    for kind in *Kinds\select!
+      amounts = @@\select [[where EXTRACT(YEAR FROM date) = ? and kind_id = ?]], year, kind.id
+      ret[kind.kind] = @@.sum_up_amounts amounts
+    ret
+
   sum_up_amounts: (accounts) ->
     sum_up = 0
     for account in *accounts

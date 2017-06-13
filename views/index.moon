@@ -21,6 +21,10 @@ class Input extends Widget
 
       h1 class:{"ui", "header"}, "年間使用金額"
       div id:"plot"
+
+      h1 class:{"ui", "header"}, "使用内訳"
+      div id:"plot2"
+
     @content_for "tail_scripts", ->
       script src:"/static/components/plotly/plotly.js"
       script src:"/static/index.js"

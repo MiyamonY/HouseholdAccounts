@@ -131,7 +131,7 @@ class Account extends lapis.Application
 
 
   "/account": =>
-    id = @req.params_get.id
+    id = @params
     account = Accounts\find id
     json: account\to_json_data!
 
@@ -141,17 +141,16 @@ class Account extends lapis.Application
         prepare_results: (accounts) ->
           map accounts, (account) -> account\to_json_data!
     }
-    page = @req.params_get.page
+    page = @params.page
     data = {}
     data.num = account_page\num_pages!
-    data.accounts = account_page\get_page if page then page else 1
+    data.accounts = account_page\get_page (page or 1)
     json: data
 
   "/accounts/sum": =>
-    params = @req.params_get
     this = os.date "*t"
-    from_ = params["from"] or this.year
-    to = params["to"] or this.year
+    from_ = @params["from"] or this.year
+    to = @params["to"] or this.year
     data = {}
     for year = from_, to
       amounts = {}
@@ -159,4 +158,10 @@ class Account extends lapis.Application
         accounts = Accounts\select_by_date year, month
         table.insert(amounts, Accounts.sum_up_amounts(accounts))
       table.insert(data, {["year"]:year, ["amounts"]:amounts})
+    json: data
+
+  "/breakdown": =>
+    this = os.date "*t"
+    year = @params.year or this.year
+    data = Accounts\breakdown_in year
     json: data

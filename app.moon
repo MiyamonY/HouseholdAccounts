@@ -12,6 +12,7 @@ class extends lapis.Application
   @include "controllers.tag"
   @include "controllers.account"
   @include "controllers.member"
+  @include "controllers.statistics"
 
   [index: "/"]: =>
     @page_title = "トップ"

@@ -10,6 +10,9 @@ class Menu
         a class:{"item"}, href:@url_for("account_list"), ->
           i class:{"list", "icon"}
           text "使ったお金"
+        a class:{"item"}, href:@url_for("statistics_statistics"), ->
+          i class:{"bar chart", "icon"}
+          text "統計"
         div class:{"ui", "dropdown", "item"}, ->
           i class:{"settings", "icon"}
           text "設定"

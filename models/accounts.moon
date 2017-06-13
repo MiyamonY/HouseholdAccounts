@@ -1,6 +1,5 @@
 import Model,enum,preload from require "lapis.db.model"
-import Members, Kinds from require "models"
-import print_as_json from require "util"
+import iter, parse_date, print_as_json from require "util"
 
 class Accounts extends Model
   @relations: {
@@ -30,6 +29,7 @@ class Accounts extends Model
     @@\select where
 
   to_json_data:  =>
+    import Members, Kinds from require "models"
     -- preload
     Members\include_in {@}, "member_id"
     Kinds\include_in {@}, "kind_id"
@@ -40,4 +40,15 @@ class Accounts extends Model
     sum_up = 0
     for account in *accounts
       sum_up += account.amount
+    sum_up
+
+  sum_up_amounts_by_month: (accounts) ->
+    sum_up = {}
+    sum_up_by_month = (account) ->
+      date = parse_date account.date
+      index = "#{date.year}-#{date.month}"
+      unless sum_up[index]
+        sum_up[index] = 0
+      sum_up[index] += account.amount
+    iter accounts, sum_up_by_month
     sum_up

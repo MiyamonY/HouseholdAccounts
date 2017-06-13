@@ -2,6 +2,10 @@ db = require "lapis.db"
 import Model, enum from require "lapis.db.model"
 
 class Members extends Model
+  @relations: {
+    {"accounts", has_many: "Accounts"}
+  }
+
   @color: enum {
     blue: 1
     red: 2
@@ -19,3 +23,15 @@ class Members extends Model
       member\update {
         deleted: db.TRUE
       }
+
+  @accounts_by_month: () =>
+    import Accounts from require "models"
+    members = @\select!
+    unless members
+      return {}
+
+    by_month = {}
+    for member in *members
+      accounts = member\get_accounts!
+      by_month[member.member] = Accounts.sum_up_amounts_by_month accounts
+    by_month

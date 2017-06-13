@@ -71,8 +71,8 @@ class Member extends lapis.Application
       @write status:404, "member(no.#{@params.id}) not found" unless @member
 
     GET: =>
-      @messages =  @session.messages
-      @session.messages = nil
+      session = Session @session
+      @messages = session\pop_messages!
       render: "member.correct"
 
     POST: capture_errors {

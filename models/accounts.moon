@@ -46,7 +46,7 @@ class Accounts extends Model
     sum_up = {}
     sum_up_by_month = (account) ->
       date = parse_date account.date
-      index = "#{date.year}-#{date.month}"
+      index = "#{date.year}年#{date.month}月"
       unless sum_up[index]
         sum_up[index] = 0
       sum_up[index] += account.amount

@@ -3,10 +3,10 @@ import Widget from require "lapis.html"
 class Statistics extends Widget
   content: =>
     h1 class:{"ui", "header"}, "月毎の支払い金額"
-    element "table", class:{"ui", "sortable", "unstackable", "celled", "table"}, ->
+    element "table", class:{"ui", "sortable", "unstackable", "celled", "definition", "table"}, ->
       thead ->
         tr ->
-          th class:{"center"}, "日付け"
+          th class:{"center"}
           for member in *@members
             th class:{"center"}, member
       tbody ->

@@ -14,4 +14,6 @@ class Statistics extends Widget
             tr ->
               td class:{"center"}, month
               for member in *@members
-                td class:{"center"}, if amounts[member] then "￥ #{amounts[member]}" else "￥ 0"
+                amount = if amounts[member] then amounts[member] else 0
+                td class:{"center"}, ["data-sort-value"]:"#{amount}",
+                  "￥ #{amount}"

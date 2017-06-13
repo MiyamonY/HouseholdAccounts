@@ -23,13 +23,17 @@ function update_detail_table(data)
 {
     $("#table-body").empty();
     for (i = 0; i < data.accounts.length; i ++){
+        var date = data.accounts[i].date;
+        var id = data.accounts[i].id;
+        var kind = data.accounts[i].kind;
+        var amount = data.accounts[i].amount;
         $("#table-body").append($(['<tr>',
                                    '  <td class="center">',
-                                   data.accounts[i].date,
-                                   '<a class="ui mini blue label detail" data-value="'+ data.accounts[i].id + '">info</a>',
+                                   date,
+                                   '<a class="ui mini blue label detail" data-value="'+ id + '">info</a>',
                                    '  </td>',
-                                   '  <td class="center">' + data.accounts[i].kind + '</td>',
-                                   '  <td class="center">￥ ' + data.accounts[i].amount + '</td>',
+                                   '  <td class="center">' + kind + '</td>',
+                                   '  <td class="center" data-sort-value="' + amount + '">￥ ' + amount + '</td>',
                                    '</tr>'].join('\n')));
     };
     attach_detail_show_event();
@@ -82,13 +86,13 @@ function update_pagination_menu(num)
         } else{
             pre = pre.concat(['<a class="item page-button" data-value="' + 1 + '">' + 1 + '</a>']);
             pre = pre.concat(['<a class="item disabled">...</a>']);
-            pre = pre.concat(['<a class="item page-button" data-value="' + page + '">' + page + '</a>'])
+            pre = pre.concat(['<a class="item page-button" data-value="' + page + '">' + page + '</a>']);
             pre = pre.concat(['<a class="item disabled">...</a>']);
             pre = pre.concat(['<a class="item page-button" data-value="' + num + '">' + num + '</a>']);
         }
     }
 
-    var str = pre.concat(post).join('\n')
+    var str = pre.concat(post).join('\n');
     pagination_menu.append($(str));
 
     attach_event_to_pagination_button();

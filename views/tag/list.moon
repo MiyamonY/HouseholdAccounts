@@ -29,7 +29,7 @@ class List extends Widget
           i class:{"plus", "fitted", "icon"}
       @create_message @messages
       form method:"post", id:"form", action:@url_for("tag_delete"), ->
-        element "table", class:{"ui", "sortable", "unstackable", "celled", "table"}, ->
+        element "table", class:{"ui", "sortable", "unstackable", "celled", "striped", "table"}, ->
           thead ->
             tr ->
               th class:{"center"}, "店名等"

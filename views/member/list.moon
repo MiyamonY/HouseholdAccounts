@@ -14,7 +14,7 @@ class List extends Widget
           i class:{"plus", "fitted", "icon"}
       @create_message @messages
       form method:"post", id:"form", ->
-        element "table", class:{"ui", "sortable", "unstackable", "celled", "table"}, ->
+        element "table", class:{"ui", "sortable", "unstackable", "celled", "striped", "table"}, ->
           thead ->
             tr ->
               th class:{"center"}, "名前"

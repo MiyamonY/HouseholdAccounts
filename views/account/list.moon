@@ -7,7 +7,7 @@ class DetailModal
     div class:{"ui", "small", "modal"}, id:"detail-modal", ->
       div class:{"header"}, "詳細"
       div class:{"content"}, ->
-        element "table", class:{"ui", "unstackable", "definition", "table"}, ->
+        element "table", class:{"ui", "unstackable", "definition", "striped", "table"}, ->
           tbody ->
             tr ->
               td class:{"center"}, "支払い日"
@@ -50,7 +50,7 @@ class List extends Widget
             div class:{"ui", "right", "clickable", "page", "button", if i == 10 then "active" else ""}, ["data-value"]:"#{i}", "#{i}"
       div class:{"ui", "basic", "segment"}, ->
         div class:{"ui", "active","loader"}, id:"table-loader"
-        element "table", class:{"ui", "sortable", "unstackable", "celled", "table"}, ->
+        element "table", class:{"ui", "sortable", "unstackable", "celled", "striped", "table"}, ->
           thead ->
             tr ->
               th class:{"center"}, "支払い日"

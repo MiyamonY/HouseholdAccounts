@@ -4,7 +4,7 @@ db = require "lapis.db"
 import respond_to, capture_errors from require "lapis.application"
 import assert_valid from require "lapis.validate"
 import Members from require "models"
-import Message from require "views.util.message"
+import MemberMessage, Message from require "views.util.message"
 import Session from require "controllers.session"
 import print_as_json from require "util"
 
@@ -27,7 +27,7 @@ class Member extends lapis.Application
     POST: =>
       member = Members\delete_by_id @params.delete
       message = if member
-          Message("info", "削除", {"削除しました:#{member.member}"})
+          MemberMessage(Message.types.delete, "削除", member)
         else
           Message(Message.types.db_error, "エラー", {"削除に失敗しました"})
       session = Session @session
@@ -45,7 +45,7 @@ class Member extends lapis.Application
       =>
         Member.validation_check @params
 
-        Members\create {
+        member = Members\create {
           member: @params.name
           token: if @params.token then @params.token else nil
           color: 0
@@ -54,7 +54,7 @@ class Member extends lapis.Application
         }
 
         session = Session @session
-        session\push_messages {Message("info", "追加", {"追加しました:#{@params.name}"})}
+        session\push_messages {MemberMessage(Message.types.add, "追加", member)}
 
         redirect_to: @url_for "member_list"
 
@@ -85,7 +85,7 @@ class Member extends lapis.Application
         }
 
         session = Session @session
-        session\push_messages {Message("info", "修正", {"修正しました:#{@params.token}"})}
+        session\push_messages {MemberMessage(Message.types.correct, "修正", @member)}
 
         redirect_to: @url_for "member_list"
 

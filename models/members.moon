@@ -18,11 +18,12 @@ class Members extends Model
     Members\select "where deleted = ? and token <> ? and send = ?", db.FALSE, "", db.TRUE
 
   @delete_by_id: (id) =>
-    member = Members\find @params.delete
+    member = Members\find id
     if member
       member\update {
         deleted: db.TRUE
       }
+    member
 
   @accounts_by_month: () =>
     import Accounts from require "models"

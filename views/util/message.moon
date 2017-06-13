@@ -57,6 +57,14 @@ class AccountMessage extends Message
       "今月の使用金額: ￥#{total}"
       }, "\n"
 
+class MemberMessage extends Message
+  new: (type, header, @member) =>
+    messages = {"名前: #{@member.member}",
+      "トークン: " .. if @member.token != "" then "入力済み" else "入力なし",
+      "通知: " .. if @member.send then "する" else "しない"
+    }
+    super type, header, messages
+
 class MessageWidget
   create_message: (messages) =>
     if messages
@@ -68,4 +76,4 @@ class MessageWidget
             for mes in *message.messages
               li mes
 
-{:AccountMessage, :Message, :MessageWidget}
+{:AccountMessage, :Message, :MessageWidget, :MemberMessage}

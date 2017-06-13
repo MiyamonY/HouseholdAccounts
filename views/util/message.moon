@@ -65,6 +65,12 @@ class MemberMessage extends Message
     }
     super type, header, messages
 
+class TagMessage extends Message
+  new: (type, header, @tag) =>
+    messages = {"名前: #{@tag.name}",
+    }
+    super type, header, messages
+
 class MessageWidget
   create_message: (messages) =>
     if messages
@@ -76,4 +82,4 @@ class MessageWidget
             for mes in *message.messages
               li mes
 
-{:AccountMessage, :Message, :MessageWidget, :MemberMessage}
+{:AccountMessage, :Message, :MessageWidget, :MemberMessage, :TagMessage}

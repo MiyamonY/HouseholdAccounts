@@ -61,7 +61,7 @@ $(function(){
     year = new Date().getFullYear();
 
     $.getJSON('/account/accounts/sum',
-			        {form: year,
+			        {form: 2017,
                to:year},
               accounts_received
 			       );

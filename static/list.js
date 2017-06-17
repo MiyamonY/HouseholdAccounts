@@ -28,8 +28,8 @@ function update_detail_table(data)
         var kind = data.accounts[i].kind;
         var amount = data.accounts[i].amount;
         $("#table-body").append($(['<tr>',
-                                   '  <td class="center">',
-                                   date,
+                                   '  <td class="center" data-sort-value="'+ date.replace(/(\d+)-(\d+)-(\d+)/, '$1$2$3') + '">',
+                                   date.replace(/(\d+)-(\d+)-(\d+)/, '$1年$2月$3日'),
                                    '<a class="ui mini blue label detail" data-value="'+ id + '">info</a>',
                                    '  </td>',
                                    '  <td class="center">' + kind + '</td>',

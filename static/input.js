@@ -50,7 +50,7 @@ $(function(){
                          }
                         });
 
-    $('div.label').click(function(e){
+    $('a.label').click(function(e){
         $('#etc').val($(this).data('value'));
     });
 });

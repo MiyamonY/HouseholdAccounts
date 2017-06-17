@@ -34,11 +34,10 @@ class AccountInputWidget
       div class:{"field"}, ->
           label "その他"
           input name:"etc", type:"text", id:"etc", placeholder:"店名など", value:etc
-          if @tags
-            div class:{"ui", "tag", "mini", "labels"}, ->
-              for tag in *tags
-                a href:"#etc", ->
-                  div class:{"ui", "#{tag.color}", "label"}, ["data-value"]:"#{tag.name}", "#{tag.name}"
+      if @tags
+        div class:{"ui", "tiny", "labels"}, ->
+          for tag in *tags
+            a class:{"ui", "basic", "#{tag\to_color!}", "label"}, href:"#etc", ["data-value"]:"#{tag.name}",  "#{tag.name}"
       div class:{"field"}, ->
         div class:{"ui", "error", "message"}
         button class:{"ui", "positive", "basic", "button"}, type:"submit", "追加"

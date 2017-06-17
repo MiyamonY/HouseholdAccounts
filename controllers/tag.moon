@@ -5,7 +5,6 @@ import assert_valid from require "lapis.validate"
 import Tags from require "models"
 import TagMessage, Message from require "views.util.message"
 import map from require "util"
-import print_as_json from require "util"
 import Session from require "controllers.session"
 
 class Tag extends lapis.Application
@@ -17,16 +16,18 @@ class Tag extends lapis.Application
       @tags = Tags\select!
       session = Session @session
       @messages = session\pop_messages!
+      @colors = Tags.colors
       render: "tag.list"
 
     POST: capture_errors {
       =>
         assert_valid @params, {
           {"name", "タグ名を入力して下さい", exists:true}
+          {"color", "タグ色を入力して下さい", exists:true}
         }
 
-        tag = Tags\create { name:@params.name, color:Tags.colors\for_db "blue" }
-
+        tag = Tags\create { name:@params.name, color:@params.color }
+        tag\refresh!
         session = Session @session
         session\push_messages {TagMessage(Message.types.add, "追加", tag)}
         redirect_to: @url_for "tag_list"
@@ -34,7 +35,32 @@ class Tag extends lapis.Application
       on_error: =>
         session = Session @session
         session\push_messages {Message(Message.types.validation_error, "エラー", @errors)}
-        print_as_json msg
+        redirect_to: @url_for "tag_list"
+    }
+  }
+
+  [correct: "/correct"]: respond_to {
+    before: =>
+      @tag = Tags\find @params.id
+      @write status:404, "tag(no.#{@params.delete}) not found" unless @tag
+
+    POST: capture_errors {
+      =>
+        assert_valid @params, {
+          {"name", "タグ名を入力して下さい", exists:true}
+          {"color", "タグ色を入力して下さい", exists:true}
+        }
+
+        @tag\update {name: @params.name, color: @params.color}
+        @tag\refresh!
+
+        session = Session @session
+        session\push_messages {TagMessage(Message.types.correct, "修正", @tag)}
+        redirect_to:@url_for "tag_list"
+
+      on_error: =>
+        session = Session @session
+        session\push_messages {Message(Message.types.validation_error, "エラー", @errors)}
         redirect_to: @url_for "tag_list"
     }
   }

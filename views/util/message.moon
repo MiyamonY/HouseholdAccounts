@@ -67,7 +67,11 @@ class MemberMessage extends Message
 
 class TagMessage extends Message
   new: (type, header, @tag) =>
+    import print_as_json from require "util"
+    print_as_json @tag.color
+    print_as_json @tag\to_color!
     messages = {"名前: #{@tag.name}",
+    "色: #{@tag\to_color!}"
     }
     super type, header, messages
 

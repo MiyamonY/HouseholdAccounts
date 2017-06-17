@@ -40,7 +40,7 @@ class AccountInputWidget
             a class:{"ui", "basic", "#{tag\to_color!}", "label"}, href:"#etc", ["data-value"]:"#{tag.name}",  "#{tag.name}"
       div class:{"field"}, ->
         div class:{"ui", "error", "message"}
-        button class:{"ui", "positive", "basic", "button"}, type:"submit", "追加"
-        a class:{"ui", "negative", "basic", "button"}, href:@url_for("account_list"), "戻る"
+        button class:{"ui", "positive", "basic", "submit", "button"}, type:"button", "追加"
+        a class:{"ui", "negative", "basic", "cancel", "button"}, href:@url_for("account_list"), "戻る"
 
 {:AccountInputWidget}

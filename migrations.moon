@@ -68,4 +68,9 @@ db = require "lapis.db"
     color: 2
     deleted: db.FALSE
   }
+
+[3]: =>
+  db.insert "kinds", {
+    kind: "食費(外食)"
+  }
 }

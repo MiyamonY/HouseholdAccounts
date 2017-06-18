@@ -136,11 +136,19 @@ class Account extends lapis.Application
     json: account\to_json_data!
 
   "/accounts": =>
-    num = @params.num
-    account_page = Accounts\paginated [[order by date desc]], {per_page:num,
+    num, year, month = @params.num, @params.year, @params.month
+    local account_page
+    if year == "-1" or month == "-1"
+      account_page = Accounts\paginated [[order by date desc]], {per_page:num,
         prepare_results: (accounts) ->
           map accounts, (account) -> account\to_json_data!
-    }
+      }
+    else
+      account_page = Accounts\paginated [[ where EXTRACT(YEAR FROM date) = ? and EXTRACT(MONTH FROM date) = ?
+        order by date desc]], year, month, {per_page:num,
+          prepare_results: (accounts) ->
+            map accounts, (account) -> account\to_json_data!
+      }
     page = @params.page
     data = {}
     data.num = account_page\num_pages!

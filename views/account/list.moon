@@ -43,7 +43,17 @@ class List extends Widget
         a class:{"ui", "teal", "circular", "huge", "label"}, href:@url_for("account_input"), ->
           i class:{"plus", "fitted", "icon"}
       @create_message @messages
-      div class:{"ui", "basic", "segment"}, ->
+      div class:{"ui", "basic", "mini", "segment"}, ->
+        element "select", class:{"ui", "date", "selection", "dropdown"}, id:"date-select-dropdown", ->
+          option "全て表示"
+          this = os.date "*t"
+          year, month = 2017, 1
+          while year <= this.year and month <= this.month
+            option "#{year}年#{month}月"
+            month += 1
+            if month == 13
+              year += 1
+              month =1
         div class:{"ui", "right", "floated", "mini", "teal", "buttons"}, ->
           div class:{"ui", "right", "page", "button"}, "表示数"
           for i in *{10, 20, 50, 100}

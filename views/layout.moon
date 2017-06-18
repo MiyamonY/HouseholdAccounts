@@ -50,5 +50,5 @@ class Layout extends Widget
 
         div class:{"ui", "main", "text", "container"}, ->
           @content_for "inner"
-        @content_for "tail_scripts"
         script src:"/static/common.js"
+        @content_for "tail_scripts"
